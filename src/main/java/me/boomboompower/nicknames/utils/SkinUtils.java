@@ -17,17 +17,30 @@
 
 package me.boomboompower.nicknames.utils;
 
+import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import me.boomboompower.nicknames.NicknamesMain;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
+import net.minecraft.client.main.GameConfiguration;
 import net.minecraft.client.network.NetworkPlayerInfo;
+import net.minecraft.client.renderer.IImageBuffer;
+import net.minecraft.client.renderer.ImageBufferDownload;
+import net.minecraft.client.renderer.ThreadDownloadImageData;
+import net.minecraft.client.renderer.texture.ITextureObject;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.client.resources.DefaultPlayerSkin;
+import net.minecraft.client.resources.SkinManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.lang.invoke.MethodHandle;
 
 public class SkinUtils {
+
+    private static Minecraft mc;
 
     private static final ResourceLocation ALEX = new ResourceLocation("textures/entity/alex.png");
     private static final ResourceLocation STEVE = new ResourceLocation("textures/entity/steve.png");
@@ -37,6 +50,8 @@ public class SkinUtils {
 
     public static void begin(AbstractClientPlayer player) {
         if (!NicknamesMain.isEnabled()) return;
+
+        mc = Minecraft.getMinecraft();
 
         Minecraft.getMinecraft().addScheduledTask(() -> replaceSkin(player));
     }
@@ -70,7 +85,7 @@ public class SkinUtils {
                 skinToUse = new ResourceLocation("nicknamesmod:stone.png");
                 break;
             default:
-                skinToUse = NicknamesMain.hasDefaultSkin() ? NicknamesMain.defaultSkin : STEVE;
+                skinToUse = loadSkin(player); //NicknamesMain.hasDefaultSkin() ? NicknamesMain.defaultSkin : STEVE;
         }
 
         try {
@@ -78,5 +93,33 @@ public class SkinUtils {
         } catch (Throwable x) {
             x.printStackTrace();
         }
+    }
+
+    public static ResourceLocation loadSkin(AbstractClientPlayer player) {
+        final ResourceLocation resourcelocation = new ResourceLocation("skins/" + NicknamesMain.userName);
+        ITextureObject itextureobject = mc.renderEngine.getTexture(resourcelocation);
+
+        File file1 = new File(new File(".", "skins"), NicknamesMain.userName.length() > 2 ? NicknamesMain.userName.substring(0, 2) : "xx");
+        File file2 = new File(file1,NicknamesMain.userName);
+        final IImageBuffer iimagebuffer = new ImageBufferDownload();
+
+        ThreadDownloadImageData threaddownloadimagedata = new ThreadDownloadImageData(file2, String.format("https://minotar.net/skin/%s", NicknamesMain.userName), DefaultPlayerSkin.getDefaultSkinLegacy(), new IImageBuffer() {
+            public BufferedImage parseUserSkin(BufferedImage image) {
+                if (iimagebuffer != null) {
+                    image = iimagebuffer.parseUserSkin(image);
+                }
+
+                return image;
+            }
+            public void skinAvailable() {
+                if (iimagebuffer != null)
+                {
+                    iimagebuffer.skinAvailable();
+                }
+            }
+        });
+        mc.renderEngine.loadTexture(resourcelocation, threaddownloadimagedata);
+
+        return resourcelocation;
     }
 }

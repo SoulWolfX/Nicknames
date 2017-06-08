@@ -23,12 +23,15 @@ import me.boomboompower.nicknames.utils.FileUtils;
 import me.boomboompower.nicknames.utils.SkinUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.command.ICommand;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.ClientCommandHandler;
+import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ModMetadata;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -46,8 +49,6 @@ public class NicknamesMain {
     public static final String VERSION = "1.2.0";
 
     public static String USER_DIR;
-
-    public static ResourceLocation defaultSkin;
 
     public static SkinType skinType = SkinType.NONE;
 
@@ -85,11 +86,7 @@ public class NicknamesMain {
     @SubscribeEvent
     public void onRender(RenderLivingEvent.Pre event) {
         if (event.entity instanceof EntityPlayerSP && NicknamesMain.isEnabled()) {
-            if (hasDefaultSkin()) {
-                SkinUtils.begin(Minecraft.getMinecraft().thePlayer);
-            } else {
-                NicknamesMain.defaultSkin = Minecraft.getMinecraft().thePlayer.getLocationSkin();
-            }
+            SkinUtils.begin(Minecraft.getMinecraft().thePlayer);
         }
     }
 
@@ -107,19 +104,6 @@ public class NicknamesMain {
     private void registerEvents(Object... events) {
         for (Object event : events) {
             MinecraftForge.EVENT_BUS.register(event);
-        }
-    }
-
-    public static boolean hasDefaultSkin() {
-        return defaultSkin != null;
-    }
-
-    public static boolean isObf() {
-        try {
-            Minecraft.getMinecraft().getClass().getDeclaredField("logger");
-            return false;
-        } catch (Exception ex) {
-            return true;
         }
     }
 

@@ -63,7 +63,7 @@ public class FileUtils {
 
                if (lines.size() >= 1) {
                    NicknamesMain.useRanks = Boolean.parseBoolean((String) lines.get(0));
-                   NicknamesMain.skinType = NicknamesMain.SkinType.valueOf((String) lines.get(1));
+                   NicknamesMain.skinType = NicknamesMain.SkinType.NONE; // NicknamesMain.SkinType.valueOf((String) lines.get(1));
                } else {
                    settings = true;
                    executeWriter = true;
