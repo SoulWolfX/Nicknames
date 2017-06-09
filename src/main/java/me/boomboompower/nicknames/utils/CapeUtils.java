@@ -106,9 +106,6 @@ public class CapeUtils {
 
         try {
             ObfuscationReflectionHelper.setPrivateValue(NetworkPlayerInfo.class, info, location, "locationCape", "field_178862_f");
-            System.out.println("STABBED!");
-            System.out.println("HMMMM \"" + location + "\"");
-            System.out.println("INFO \"" + info.getLocationCape() + "\"");
         } catch (Throwable x) {
             x.printStackTrace();
         }

@@ -65,32 +65,7 @@ public class NicknameCommand implements ICommand {
         if (args.length == 0) {
             new NicknameGui().display();
         } else {
-            if (args[0].equalsIgnoreCase("__reset")) {
-                SkinUtils.begin(Minecraft.getMinecraft().thePlayer, true);
-                GlobalUtils.sendMessage("Reset. Run \"/nn __get\" for more usage info!");
-            } else if (args[0].equalsIgnoreCase("__get")) {
-                Minecraft mc = Minecraft.getMinecraft();
-                GlobalUtils.sendMessage(String.format("isEnabled: %s", NicknamesMain.isEnabled()));
-                GlobalUtils.sendMessage(String.format("hasSkin: %s", mc.thePlayer.getLocationSkin() != null));
-                GlobalUtils.sendMessage(String.format("useRanks: %s", NicknamesMain.useRanks));
-                GlobalUtils.sendMessage(String.format("useSkin: %s", NicknamesMain.useSkin));
-                GlobalUtils.sendMessage("");
-                GlobalUtils.sendMessage(String.format("USER_DIR: %s", NicknamesMain.USER_DIR));
-                GlobalUtils.sendMessage("");
-                GlobalUtils.sendMessage(String.format("displayedCapeType: %s", NicknamesMain.displayedCapeType));
-                GlobalUtils.sendMessage("");
-                GlobalUtils.sendMessage(String.format("skinLoaction: %s", mc.thePlayer.getLocationSkin() != null ? mc.thePlayer.getLocationSkin() : "NONE"));
-                GlobalUtils.sendMessage(String.format("capeLocation: %s", mc.thePlayer.getLocationCape() != null ? mc.thePlayer.getLocationCape() : "NONE"));
-                GlobalUtils.sendMessage("");
-                GlobalUtils.sendMessage(String.format("hasSkin: %s", mc.thePlayer.getLocationSkin() != null));
-            } else if (args[0].equalsIgnoreCase("__deletecache")) {
-                try {
-                    FileUtils.deleteDirectory(new File(NicknamesMain.USER_DIR + "skins"));
-                } catch (Exception ex) {}
-                GlobalUtils.sendMessage(String.format("Attempted delete. stillExists = [%s]", new File(".", "skins").exists()));
-            } else {
-                new NicknameGui(args[0]).display();
-            }
+            new NicknameGui(args[0]).display();
         }
     }
 
@@ -114,4 +89,30 @@ public class NicknameCommand implements ICommand {
         return 0;
     }
 
+//            // COMMAND DEBUG LINES
+//
+//            if (args[0].equalsIgnoreCase("__reset")) {
+//                SkinUtils.begin(Minecraft.getMinecraft().thePlayer, true);
+//                GlobalUtils.sendMessage("Reset. Run \"/nn __get\" for more usage info!");
+//            } else if (args[0].equalsIgnoreCase("__get")) {
+//                Minecraft mc = Minecraft.getMinecraft();
+//                GlobalUtils.sendMessage(String.format("isEnabled: %s", NicknamesMain.isEnabled()));
+//                GlobalUtils.sendMessage(String.format("hasSkin: %s", mc.thePlayer.getLocationSkin() != null));
+//                GlobalUtils.sendMessage(String.format("useRanks: %s", NicknamesMain.useRanks));
+//                GlobalUtils.sendMessage(String.format("useSkin: %s", NicknamesMain.useSkin));
+//                GlobalUtils.sendMessage("");
+//                GlobalUtils.sendMessage(String.format("USER_DIR: %s", NicknamesMain.USER_DIR));
+//                GlobalUtils.sendMessage("");
+//                GlobalUtils.sendMessage(String.format("displayedCapeType: %s", NicknamesMain.displayedCapeType));
+//                GlobalUtils.sendMessage("");
+//                GlobalUtils.sendMessage(String.format("skinLoaction: %s", mc.thePlayer.getLocationSkin() != null ? mc.thePlayer.getLocationSkin() : "NONE"));
+//                GlobalUtils.sendMessage(String.format("capeLocation: %s", mc.thePlayer.getLocationCape() != null ? mc.thePlayer.getLocationCape() : "NONE"));
+//                GlobalUtils.sendMessage("");
+//                GlobalUtils.sendMessage(String.format("hasSkin: %s", mc.thePlayer.getLocationSkin() != null));
+//            } else if (args[0].equalsIgnoreCase("__deletecache")) {
+//                try {
+//                    FileUtils.deleteDirectory(new File(NicknamesMain.USER_DIR + "skins"));
+//                } catch (Exception ex) {}
+//                GlobalUtils.sendMessage(String.format("Attempted delete. stillExists = [%s]", new File(".", "skins").exists()));
+//            }
 }
