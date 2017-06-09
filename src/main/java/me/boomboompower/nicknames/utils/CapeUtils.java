@@ -18,7 +18,6 @@
 package me.boomboompower.nicknames.utils;
 
 import me.boomboompower.nicknames.NicknamesMain;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -27,6 +26,7 @@ import net.minecraft.client.renderer.ImageBufferDownload;
 import net.minecraft.client.renderer.ThreadDownloadImageData;
 import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.resources.DefaultPlayerSkin;
+import net.minecraft.client.resources.SkinManager;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
@@ -35,7 +35,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.lang.invoke.MethodHandle;
 
-public class SkinUtils {
+public class CapeUtils {
 
     private static Minecraft mc;
 
@@ -50,10 +50,10 @@ public class SkinUtils {
 
         mc = Minecraft.getMinecraft();
 
-        Minecraft.getMinecraft().addScheduledTask(() -> replaceSkin(player, reset));
+        Minecraft.getMinecraft().addScheduledTask(() -> replaceCape(player, reset));
     }
 
-    private static void replaceSkin(AbstractClientPlayer player, boolean reset) {
+    private static void replaceCape(AbstractClientPlayer player, boolean reset) {
         NetworkPlayerInfo info = null;
 
         try {
@@ -69,13 +69,16 @@ public class SkinUtils {
 
         ResourceLocation location;
         if (reset) {
-            location = loadSkin(NicknamesMain.userName);
+            location = null;
         } else {
-            location = loadSkin(EnumChatFormatting.getTextWithoutFormattingCodes(NicknamesMain.skinName));
+            location = loadCape(null);
         }
 
         try {
-            ObfuscationReflectionHelper.setPrivateValue(NetworkPlayerInfo.class, info, location, "locationSkin", "field_178865_e");
+            ObfuscationReflectionHelper.setPrivateValue(NetworkPlayerInfo.class, info, location, "locationCape", "field_178862_f");
+            System.out.println("STABBED!");
+            System.out.println("HMMMM \"" + location + "\"");
+            System.out.println("INFO \"" + info.getLocationCape() + "\"");
         } catch (Throwable x) {
             x.printStackTrace();
         }
@@ -83,30 +86,37 @@ public class SkinUtils {
 
     }
 
-    public static ResourceLocation loadSkin(String username) {
-        final ResourceLocation resourceLocation = new ResourceLocation("skins/" + username);
-        ITextureObject textureObject = mc.renderEngine.getTexture(resourceLocation);
+    public static ResourceLocation loadCape(String username) {
 
-        File skinsDirectory = new File(new File(".", "skins"), username.length() > 2 ? username.substring(0, 2) : "xx");
-        File downloadedSkinLocation = new File(skinsDirectory, username);
-        final IImageBuffer imageBuffer = new ImageBufferDownload();
+        ResourceLocation location = new ResourceLocation("nicknamesmod:capes/star.png");
 
-        ThreadDownloadImageData imageData = new ThreadDownloadImageData(downloadedSkinLocation, String.format("https://minotar.net/skin/%s", username), DefaultPlayerSkin.getDefaultSkinLegacy(), new IImageBuffer() {
+        mc.renderEngine.bindTexture(location);
 
-            public BufferedImage parseUserSkin(BufferedImage image) {
-                if (imageBuffer != null) {
-                    image = imageBuffer.parseUserSkin(image);
-                }
-                return image;
-            }
-            public void skinAvailable() {
-                if (imageBuffer != null) {
-                    imageBuffer.skinAvailable();
-                }
-            }
-        });
-        mc.renderEngine.loadTexture(resourceLocation, imageData);
+        return location;
 
-        return resourceLocation;
+//        final ResourceLocation resourceLocation = new ResourceLocation("capes/" + username);
+//        ITextureObject textureObject = mc.renderEngine.getTexture(resourceLocation);
+//
+//        File skinsDirectory = new File(new File(".", "capes"), username.length() > 2 ? username.substring(0, 2) : "xx");
+//        File downloadedSkinLocation = new File(skinsDirectory, username);
+//        final IImageBuffer imageBuffer = new ImageBufferDownload();
+//
+//        ThreadDownloadImageData imageData = new ThreadDownloadImageData(downloadedSkinLocation, String.format("https://minotar.net/skin/%s", username), DefaultPlayerSkin.getDefaultSkinLegacy(), new IImageBuffer() {
+//
+//            public BufferedImage parseUserSkin(BufferedImage image) {
+//                if (imageBuffer != null) {
+//                    image = imageBuffer.parseUserSkin(image);
+//                }
+//                return image;
+//            }
+//            public void skinAvailable() {
+//                if (imageBuffer != null) {
+//                    imageBuffer.skinAvailable();
+//                }
+//            }
+//        });
+//        mc.renderEngine.loadTexture(resourceLocation, imageData);
+//
+//        return resourceLocation;
     }
 }

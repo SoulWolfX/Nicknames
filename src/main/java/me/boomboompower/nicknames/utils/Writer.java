@@ -57,7 +57,7 @@ public class Writer implements Runnable {
                 FileWriter e = new FileWriter(NicknamesMain.USER_DIR + "settings.nn");
 
                 this.write(e, NicknamesMain.useRanks + ls);
-                this.write(e, NicknamesMain.skinType + ls);
+                this.write(e, NicknamesMain.useSkin + ls);
 
                 e.close();
             } catch (Throwable var56) {

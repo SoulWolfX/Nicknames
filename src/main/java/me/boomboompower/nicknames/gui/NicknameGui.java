@@ -18,10 +18,7 @@
 package me.boomboompower.nicknames.gui;
 
 import me.boomboompower.nicknames.NicknamesMain;
-import me.boomboompower.nicknames.utils.GlobalUtils;
-import me.boomboompower.nicknames.utils.ProfileUtils;
-import me.boomboompower.nicknames.utils.SkinUtils;
-import me.boomboompower.nicknames.utils.Writer;
+import me.boomboompower.nicknames.utils.*;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -31,6 +28,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
 
@@ -45,6 +43,15 @@ import java.awt.*;
 
 public class NicknameGui extends GuiScreen {
 
+    int write = -70;
+    int top = -46;
+    int middle = -22;
+    int under = 2;
+    int bottom = 26;
+
+    int butWidth = 150;
+    int butHeight = 20;
+
     private GuiTextField text;
     private String input = "";
 
@@ -58,15 +65,28 @@ public class NicknameGui extends GuiScreen {
 
     @Override
     public void initGui() {
-        text = new GuiTextField(0, this.fontRendererObj, this.width / 2 - 75, this.height / 2 - 58, 150, 20);
-        this.buttonList.add(new GuiButton(1, this.width / 2 - 75, this.height / 2 - 22, 150, 20, "Set"));
-        this.buttonList.add(new GuiButton(2, this.width / 2 - 75, this.height / 2 + 2, 150, 20, "Reset"));
-        this.buttonList.add(new GuiButton(3, this.width / 2 - 75, this.height / 2 + 26, 150, 20, "Use Ranks: " + getRanks()));
-        this.buttonList.add(new GuiButton(4, this.width / 2 - 75, this.height / 2 + 50, 150, 20, "Current Skin: " + getSkin()));
+        Keyboard.enableRepeatEvents(true);
+
+        text = new GuiTextField(0, this.fontRendererObj, this.width / 2 - 75, this.height / 2 + write, butWidth, butHeight);
+
+        this.buttonList.add(new GuiButton(1, this.width / 2 - 160, this.height / 2 + top, butWidth, butHeight, "Set Name"));
+        this.buttonList.add(new GuiButton(2, this.width / 2 + 10, this.height / 2 + top, butWidth, butHeight, "Reset Name"));
+
+        this.buttonList.add(new GuiButton(3, this.width / 2 - 160, this.height / 2 + middle, butWidth, butHeight, "Set Skin"));
+        this.buttonList.add(new GuiButton(4, this.width / 2 + 10, this.height / 2 + middle, butWidth, butHeight, "Reset Skin"));
+
+        this.buttonList.add(new GuiButton(5, this.width / 2 - 160, this.height / 2 + under, butWidth, butHeight, "Set Cape"));
+        this.buttonList.add(new GuiButton(6, this.width / 2 + 10, this.height / 2 + under, butWidth, butHeight, "Reset Cape"));
+
+        this.buttonList.add(new GuiButton(7, this.width / 2 - 160, this.height / 2 + bottom, butWidth, butHeight, "Use Ranks: " + getRanks()));
+        this.buttonList.add(new GuiButton(8, this.width / 2 + 10, this.height / 2 + bottom, butWidth, butHeight, "Change skin: " + getSkin()));
 
         text.setText(input);
         text.setMaxStringLength(16);
         text.setFocused(true);
+
+        this.buttonList.get(5).enabled = false;
+        this.buttonList.get(6).enabled = false;
     }
     
     public void display() {
@@ -83,7 +103,7 @@ public class NicknameGui extends GuiScreen {
     public void drawScreen(int x, int y, float ticks) {
         drawDefaultBackground();
         text.drawTextBox();
-        drawCenteredString(this.fontRendererObj, "Nicknames", this.width / 2, this.height / 2 - 82, Color.WHITE.getRGB());
+        drawCenteredString(this.fontRendererObj, "Nicknames", this.width / 2, this.height / 2 - 94, Color.WHITE.getRGB());
         super.drawScreen(x, y, ticks);
     }
 
@@ -111,6 +131,9 @@ public class NicknameGui extends GuiScreen {
 
     @Override
     protected void actionPerformed(GuiButton button) {
+        if (!button.enabled) return;
+
+        boolean closeGui = false;
         switch (button.id) {
             case 0:
                 // Dont need to do anything
@@ -125,36 +148,52 @@ public class NicknameGui extends GuiScreen {
                 } else {
                     set(text.getText());
                 }
-                Minecraft.getMinecraft().displayGuiScreen(null);
+                mc.displayGuiScreen(null);
                 break;
             case 2:
                 reset();
-                Minecraft.getMinecraft().displayGuiScreen(null);
+                mc.displayGuiScreen(null);
                 break;
             case 3:
+                if (!text.getText().isEmpty() && text.getText().length() >= 3) {
+                    boolean doable = true;
+                    for (char c : text.getText().toCharArray()) {
+                        if (!Character.isLetterOrDigit(c) && c != '_') {
+                            doable = false;
+                        }
+                    }
+                    if (doable) {
+                        setSkin(text.getText());
+                    } else {
+                        sendChatMessage("Name contains invalid characters!");
+                    }
+                } else {
+                    sendChatMessage("Not enough characters provided!");
+                }
+                mc.displayGuiScreen(null);
+                break;
+            case 4:
+                NicknamesMain.useSkin = false;
+                SkinUtils.begin(mc.thePlayer);
+                mc.displayGuiScreen(null);
+                break;
+            case 5:
+                NicknamesMain.useCapes = true;
+                CapeUtils.begin(mc.thePlayer, false);
+                mc.displayGuiScreen(null);
+            case 6:
+                NicknamesMain.useCapes = false;
+                CapeUtils.begin(mc.thePlayer);
+                mc.displayGuiScreen(null);
+                break;
+            case 7:
                 NicknamesMain.useRanks = !NicknamesMain.useRanks;
                 button.displayString = "Use ranks: " + getRanks();
                 break;
-            case 4:
-                switch (NicknamesMain.skinType) {
-                    case STEVE:
-                        NicknamesMain.skinType = NicknamesMain.SkinType.ALEX;
-                        break;
-                    case ALEX:
-                        NicknamesMain.skinType = NicknamesMain.SkinType.BOOMBOOMPOWER;
-                        break;
-                    case BOOMBOOMPOWER:
-                        NicknamesMain.skinType = NicknamesMain.SkinType.STONE;
-                        break;
-                    case STONE:
-                        NicknamesMain.skinType = NicknamesMain.SkinType.NONE;
-                        break;
-                    default:
-                        NicknamesMain.skinType = NicknamesMain.SkinType.STEVE;
-                        break;
-                }
-                button.displayString = "Current Skin: " + getSkin();
-                SkinUtils.begin(mc.thePlayer);
+            case 8:
+                NicknamesMain.useSkin = !NicknamesMain.useSkin;
+                button.displayString = "Change skin: " + getSkin();
+                break;
         }
     }
 
@@ -178,15 +217,7 @@ public class NicknameGui extends GuiScreen {
     }
 
     private String getSkin() {
-        return (compareOG(NicknamesMain.SkinType.SkinOriginality.ORIGINAL) ? EnumChatFormatting.GREEN : compareOG(NicknamesMain.SkinType.SkinOriginality.CUSTOM) ? EnumChatFormatting.GOLD : EnumChatFormatting.RED) + (compareType(NicknamesMain.SkinType.STEVE) ? "Steve" : compareType(NicknamesMain.SkinType.ALEX) ? "Alex" : compareType(NicknamesMain.SkinType.BOOMBOOMPOWER) ? "boom" : compareType(NicknamesMain.SkinType.STONE) ? "Stone" : "None");
-    }
-
-    private boolean compareType(NicknamesMain.SkinType type) {
-        return NicknamesMain.skinType == type;
-    }
-
-    private boolean compareOG(NicknamesMain.SkinType.SkinOriginality originality) {
-        return NicknamesMain.skinType.originality == originality;
+        return (NicknamesMain.useSkin ? EnumChatFormatting.GREEN + "Yes" : EnumChatFormatting.RED + "No");
     }
 
     private void set(String name) {
@@ -194,11 +225,18 @@ public class NicknameGui extends GuiScreen {
         sendChatMessage("Your nickname is now " + goldify(name) + "!");
 
         ProfileUtils.begin(mc.thePlayer);
-        SkinUtils.begin(mc.thePlayer);
+    }
+
+    private void setSkin(String skinName) {
+        NicknamesMain.useSkin = true;
+        NicknamesMain.skinName = EnumChatFormatting.getTextWithoutFormattingCodes(GlobalUtils.translateAlternateColorCodes('&', skinName));
+        sendChatMessage(String.format("Your skin has been updated to %s!", EnumChatFormatting.GOLD + skinName + EnumChatFormatting.GRAY));
+
+        SkinUtils.begin(mc.thePlayer, !NicknamesMain.useSkin);
     }
 
     private void reset() {
-        NicknamesMain.skinType = NicknamesMain.SkinType.NONE;
+        NicknamesMain.useSkin = false;
         NicknamesMain.nickname = NicknamesMain.userName;
         sendChatMessage("Your nickname has been reset!");
 

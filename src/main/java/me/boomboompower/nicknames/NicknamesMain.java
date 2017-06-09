@@ -45,10 +45,12 @@ public class NicknamesMain {
 
     public static String USER_DIR;
 
-    public static SkinType skinType = SkinType.NONE;
-
+    public static Boolean useCapes = false;
     public static Boolean useRanks = true;
+    public static Boolean useSkin = false;
 
+    public static String skinName = "Notch";
+    public static String capeName = "Notch";
     public static String userName = "username";
     public static String nickname = "nickname";
 
@@ -79,9 +81,19 @@ public class NicknamesMain {
     }
 
     @SubscribeEvent
-    public void onRender(RenderLivingEvent.Pre event) {
+    public void onRender(RenderLivingEvent.Post event) {
         if (event.entity instanceof EntityPlayerSP && NicknamesMain.isEnabled()) {
-            SkinUtils.begin(Minecraft.getMinecraft().thePlayer);
+            if (useSkin) {
+                SkinUtils.begin(Minecraft.getMinecraft().thePlayer, true);
+            } else {
+                SkinUtils.begin(Minecraft.getMinecraft().thePlayer, false);
+            }
+
+//            if (useCapes) {
+//                CapeUtils.begin(Minecraft.getMinecraft().thePlayer, true);
+//            } else {
+//                SkinUtils.begin(Minecraft.getMinecraft().thePlayer, false);
+//            }
         }
     }
 
@@ -104,25 +116,5 @@ public class NicknamesMain {
 
     public static boolean isEnabled() {
         return !NicknamesMain.nickname.equals(NicknamesMain.userName);
-    }
-
-    public enum SkinType {
-        NONE(SkinOriginality.NORMAL),
-        STEVE(SkinOriginality.ORIGINAL),
-        ALEX(SkinOriginality.ORIGINAL),
-        STONE(SkinOriginality.CUSTOM),
-        BOOMBOOMPOWER(SkinOriginality.CUSTOM);
-
-        public SkinOriginality originality;
-
-        SkinType(SkinOriginality originality) {
-            this.originality = originality;
-        }
-
-        public enum SkinOriginality {
-            ORIGINAL,
-            NORMAL,
-            CUSTOM
-        }
     }
 }
