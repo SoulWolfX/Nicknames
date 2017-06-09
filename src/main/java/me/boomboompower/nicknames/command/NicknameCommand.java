@@ -14,24 +14,18 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package me.boomboompower.nicknames.command;
 
-import me.boomboompower.nicknames.NicknamesMain;
 import me.boomboompower.nicknames.gui.NicknameGui;
 import me.boomboompower.nicknames.utils.GlobalUtils;
-import me.boomboompower.nicknames.utils.SkinUtils;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumChatFormatting;
-import org.apache.commons.io.FileUtils;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -18,6 +18,7 @@ package me.boomboompower.nicknames.gui;
 
 import me.boomboompower.nicknames.utils.CapeUtils;
 import me.boomboompower.nicknames.utils.GlobalUtils;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;

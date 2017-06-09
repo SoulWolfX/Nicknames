@@ -14,12 +14,10 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package me.boomboompower.nicknames.events;
 
 import me.boomboompower.nicknames.NicknamesMain;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
@@ -27,12 +25,6 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class NicknameEvents {
-
-    private Minecraft mc;
-
-    public NicknameEvents() {
-        this.mc = Minecraft.getMinecraft();
-    }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onChatRecieve(ClientChatReceivedEvent event) {
@@ -63,13 +55,6 @@ public class NicknameEvents {
     public boolean isRank(String message) {
         return message.startsWith("[MVP] ") || message.startsWith("[MVP+] ") || message.startsWith("[VIP] ") || message.startsWith("[VIP+] ");
     }
-
-//    @SubscribeEvent
-//    public void onRender(RenderLivingEvent.Pre event) {
-//        if (event.entity instanceof EntityPlayerSP && NicknamesMain.isEnabled()) {
-//            event.setCanceled(true);
-//        }
-//    }
 
     /*
 
