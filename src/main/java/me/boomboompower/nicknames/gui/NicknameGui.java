@@ -25,6 +25,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -85,8 +86,8 @@ public class NicknameGui extends GuiScreen {
         text.setMaxStringLength(16);
         text.setFocused(true);
 
-        this.buttonList.get(5).enabled = false;
-        this.buttonList.get(6).enabled = false;
+//        this.buttonList.get(4).enabled = false;
+//        this.buttonList.get(5).enabled = false;
     }
     
     public void display() {
@@ -95,7 +96,7 @@ public class NicknameGui extends GuiScreen {
 
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
-        FMLCommonHandler.instance().bus().unregister(this);
+        MinecraftForge.EVENT_BUS.unregister(this);
         Minecraft.getMinecraft().displayGuiScreen(this);
     }
 
@@ -178,12 +179,9 @@ public class NicknameGui extends GuiScreen {
                 mc.displayGuiScreen(null);
                 break;
             case 5:
-                NicknamesMain.useCapes = true;
-                CapeUtils.begin(mc.thePlayer, false);
-                mc.displayGuiScreen(null);
+                new CapeSelectionGUI(this).display();
             case 6:
-                NicknamesMain.useCapes = false;
-                CapeUtils.begin(mc.thePlayer);
+                CapeUtils.begin(mc.thePlayer, CapeSelectionGUI.CapeType.NONE);
                 mc.displayGuiScreen(null);
                 break;
             case 7:
@@ -199,6 +197,7 @@ public class NicknameGui extends GuiScreen {
 
     @Override
     public void onGuiClosed() {
+        Keyboard.enableRepeatEvents(false);
         Writer.execute(true, true);
     }
 

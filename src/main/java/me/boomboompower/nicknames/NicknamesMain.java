@@ -19,6 +19,8 @@ package me.boomboompower.nicknames;
 
 import me.boomboompower.nicknames.command.NicknameCommand;
 import me.boomboompower.nicknames.events.NicknameEvents;
+import me.boomboompower.nicknames.gui.CapeSelectionGUI;
+import me.boomboompower.nicknames.utils.CapeUtils;
 import me.boomboompower.nicknames.utils.FileUtils;
 import me.boomboompower.nicknames.utils.SkinUtils;
 
@@ -34,8 +36,10 @@ import net.minecraftforge.fml.common.ModMetadata;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.io.File;
+import java.util.concurrent.Future;
 
 @Mod(modid = NicknamesMain.MODID, version = NicknamesMain.VERSION, clientSideOnly = true, acceptedMinecraftVersions = "*")
 public class NicknamesMain {
@@ -45,14 +49,16 @@ public class NicknamesMain {
 
     public static String USER_DIR;
 
-    public static Boolean useCapes = false;
     public static Boolean useRanks = true;
     public static Boolean useSkin = false;
 
     public static String skinName = "Notch";
-    public static String capeName = "Notch";
     public static String userName = "username";
     public static String nickname = "nickname";
+
+    private int currentTick = 0;
+
+    public static CapeSelectionGUI.CapeType displayedCapeType = CapeSelectionGUI.CapeType.NONE;
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
@@ -81,19 +87,19 @@ public class NicknamesMain {
     }
 
     @SubscribeEvent
-    public void onRender(RenderLivingEvent.Post event) {
-        if (event.entity instanceof EntityPlayerSP && NicknamesMain.isEnabled()) {
-            if (useSkin) {
-                SkinUtils.begin(Minecraft.getMinecraft().thePlayer, true);
+    public void onTick(TickEvent.ClientTickEvent event) {
+        if (Minecraft.getMinecraft().currentScreen == null) {
+            if (currentTick > 0) {
+                --this.currentTick;
             } else {
-                SkinUtils.begin(Minecraft.getMinecraft().thePlayer, false);
+                if (displayedCapeType != CapeSelectionGUI.CapeType.NONE) {
+                    CapeUtils.begin(Minecraft.getMinecraft().thePlayer, displayedCapeType);
+                }
+                if (useSkin) {
+                    SkinUtils.begin(Minecraft.getMinecraft().thePlayer, false);
+                }
+                currentTick = 100;
             }
-
-//            if (useCapes) {
-//                CapeUtils.begin(Minecraft.getMinecraft().thePlayer, true);
-//            } else {
-//                SkinUtils.begin(Minecraft.getMinecraft().thePlayer, false);
-//            }
         }
     }
 

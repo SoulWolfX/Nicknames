@@ -18,42 +18,27 @@
 package me.boomboompower.nicknames.utils;
 
 import me.boomboompower.nicknames.NicknamesMain;
+import me.boomboompower.nicknames.gui.CapeSelectionGUI;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.network.NetworkPlayerInfo;
-import net.minecraft.client.renderer.IImageBuffer;
-import net.minecraft.client.renderer.ImageBufferDownload;
-import net.minecraft.client.renderer.ThreadDownloadImageData;
-import net.minecraft.client.renderer.texture.ITextureObject;
-import net.minecraft.client.resources.DefaultPlayerSkin;
-import net.minecraft.client.resources.SkinManager;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.lang.invoke.MethodHandle;
 
 public class CapeUtils {
 
-    private static Minecraft mc;
-
     private static final MethodHandle GET_PLAYER_INFO = ReflectUtils.findMethod(AbstractClientPlayer.class, new String[] {"getPlayerInfo", "func_175155_b"});
 
-    public static void begin(AbstractClientPlayer player) {
-        begin(player, true);
+    public static void begin(AbstractClientPlayer player, CapeSelectionGUI.CapeType type) {
+        NicknamesMain.displayedCapeType = type;
+
+        Minecraft.getMinecraft().addScheduledTask(() -> replaceCape(player, type));
     }
 
-    public static void begin(AbstractClientPlayer player, boolean reset) {
-        if (!NicknamesMain.isEnabled()) return;
-
-        mc = Minecraft.getMinecraft();
-
-        Minecraft.getMinecraft().addScheduledTask(() -> replaceCape(player, reset));
-    }
-
-    private static void replaceCape(AbstractClientPlayer player, boolean reset) {
+    private static void replaceCape(AbstractClientPlayer player, CapeSelectionGUI.CapeType type) {
         NetworkPlayerInfo info = null;
 
         try {
@@ -68,10 +53,55 @@ public class CapeUtils {
         }
 
         ResourceLocation location;
-        if (reset) {
-            location = null;
-        } else {
-            location = loadCape(null);
+        switch (type) {
+            case Y_2016:
+                location = getCape("2016");
+                break;
+            case Y_2015:
+                location = getCape("2015");
+                break;
+            case Y_2013:
+                location = getCape("2013");
+                break;
+            case Y_2012:
+                location = getCape("2012");
+                break;
+            case Y_2011:
+                location = getCape("2011");
+                break;
+            case MOJIRA_MOD:
+                location = getCape("tracker");
+                break;
+            case MOJANG:
+                location = getCape("mojang");
+                break;
+            case MOJANG_CLASSIC:
+                location = getCape("classic");
+                break;
+            case COBALT:
+                location = getCape("cobalt");
+                break;
+            case SCROLLS:
+                location = getCape("scrolls");
+                break;
+            case JULIAN:
+                location = getCape("julian");
+                break;
+            case MILLLION:
+                location = getCape("millionth");
+                break;
+            case MESSIAH:
+                location = getCape("messiah");
+                break;
+            case PRISMARINE:
+                location = getCape("prismarine");
+                break;
+            case CHRISTMAS:
+                location = getCape("christmas");
+                break;
+            default:
+                location = null;
+                break;
         }
 
         try {
@@ -82,41 +112,9 @@ public class CapeUtils {
         } catch (Throwable x) {
             x.printStackTrace();
         }
-
-
     }
 
-    public static ResourceLocation loadCape(String username) {
-
-        ResourceLocation location = new ResourceLocation("nicknamesmod:capes/star.png");
-
-        mc.renderEngine.bindTexture(location);
-
-        return location;
-
-//        final ResourceLocation resourceLocation = new ResourceLocation("capes/" + username);
-//        ITextureObject textureObject = mc.renderEngine.getTexture(resourceLocation);
-//
-//        File skinsDirectory = new File(new File(".", "capes"), username.length() > 2 ? username.substring(0, 2) : "xx");
-//        File downloadedSkinLocation = new File(skinsDirectory, username);
-//        final IImageBuffer imageBuffer = new ImageBufferDownload();
-//
-//        ThreadDownloadImageData imageData = new ThreadDownloadImageData(downloadedSkinLocation, String.format("https://minotar.net/skin/%s", username), DefaultPlayerSkin.getDefaultSkinLegacy(), new IImageBuffer() {
-//
-//            public BufferedImage parseUserSkin(BufferedImage image) {
-//                if (imageBuffer != null) {
-//                    image = imageBuffer.parseUserSkin(image);
-//                }
-//                return image;
-//            }
-//            public void skinAvailable() {
-//                if (imageBuffer != null) {
-//                    imageBuffer.skinAvailable();
-//                }
-//            }
-//        });
-//        mc.renderEngine.loadTexture(resourceLocation, imageData);
-//
-//        return resourceLocation;
+    private static ResourceLocation getCape(String id) {
+        return new ResourceLocation(String.format("nicknamesmod:capes/%s.png", id));
     }
 }
