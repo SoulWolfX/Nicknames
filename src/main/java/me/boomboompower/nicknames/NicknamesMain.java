@@ -29,7 +29,9 @@ import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.command.ICommand;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.client.ClientCommandHandler;
+import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
+import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ModMetadata;
@@ -39,7 +41,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.io.File;
-import java.util.concurrent.Future;
 
 @Mod(modid = NicknamesMain.MODID, version = NicknamesMain.VERSION, clientSideOnly = true, acceptedMinecraftVersions = "*")
 public class NicknamesMain {
@@ -56,7 +57,7 @@ public class NicknamesMain {
     public static String userName = "username";
     public static String nickname = "nickname";
 
-    private int currentTick = 0;
+    public static int currentTick = 0;
 
     public static CapeSelectionGUI.CapeType displayedCapeType = CapeSelectionGUI.CapeType.NONE;
 
@@ -90,7 +91,7 @@ public class NicknamesMain {
     public void onTick(TickEvent.ClientTickEvent event) {
         if (Minecraft.getMinecraft().currentScreen == null) {
             if (currentTick > 0) {
-                --this.currentTick;
+                --currentTick;
             } else {
                 if (displayedCapeType != CapeSelectionGUI.CapeType.NONE) {
                     CapeUtils.begin(Minecraft.getMinecraft().thePlayer, displayedCapeType);

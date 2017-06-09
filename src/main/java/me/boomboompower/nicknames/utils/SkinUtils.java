@@ -67,6 +67,8 @@ public class SkinUtils {
             return;
         }
 
+        mc.renderEngine.deleteTexture(mc.thePlayer.getLocationSkin());
+
         ResourceLocation location;
         if (reset) {
             location = loadSkin(NicknamesMain.userName);
@@ -79,15 +81,13 @@ public class SkinUtils {
         } catch (Throwable x) {
             x.printStackTrace();
         }
-
-
     }
 
     public static ResourceLocation loadSkin(String username) {
         final ResourceLocation resourceLocation = new ResourceLocation("skins/" + username);
         ITextureObject textureObject = mc.renderEngine.getTexture(resourceLocation);
 
-        File skinsDirectory = new File(new File(".", "skins"), username.length() > 2 ? username.substring(0, 2) : "xx");
+        File skinsDirectory = new File(new File(NicknamesMain.USER_DIR + "skins"), username.length() > 2 ? username.substring(0, 2) : "xx");
         File downloadedSkinLocation = new File(skinsDirectory, username);
         final IImageBuffer imageBuffer = new ImageBufferDownload();
 
@@ -106,7 +106,6 @@ public class SkinUtils {
             }
         });
         mc.renderEngine.loadTexture(resourceLocation, imageData);
-
         return resourceLocation;
     }
 }

@@ -20,6 +20,7 @@ package me.boomboompower.nicknames.command;
 import me.boomboompower.nicknames.NicknamesMain;
 import me.boomboompower.nicknames.gui.NicknameGui;
 import me.boomboompower.nicknames.utils.GlobalUtils;
+import me.boomboompower.nicknames.utils.SkinUtils;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
@@ -28,7 +29,9 @@ import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumChatFormatting;
+import org.apache.commons.io.FileUtils;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,7 +65,32 @@ public class NicknameCommand implements ICommand {
         if (args.length == 0) {
             new NicknameGui().display();
         } else {
-            new NicknameGui(args[0]).display();
+            if (args[0].equalsIgnoreCase("__reset")) {
+                SkinUtils.begin(Minecraft.getMinecraft().thePlayer, true);
+                GlobalUtils.sendMessage("Reset. Run \"/nn __get\" for more usage info!");
+            } else if (args[0].equalsIgnoreCase("__get")) {
+                Minecraft mc = Minecraft.getMinecraft();
+                GlobalUtils.sendMessage(String.format("isEnabled: %s", NicknamesMain.isEnabled()));
+                GlobalUtils.sendMessage(String.format("hasSkin: %s", mc.thePlayer.getLocationSkin() != null));
+                GlobalUtils.sendMessage(String.format("useRanks: %s", NicknamesMain.useRanks));
+                GlobalUtils.sendMessage(String.format("useSkin: %s", NicknamesMain.useSkin));
+                GlobalUtils.sendMessage("");
+                GlobalUtils.sendMessage(String.format("USER_DIR: %s", NicknamesMain.USER_DIR));
+                GlobalUtils.sendMessage("");
+                GlobalUtils.sendMessage(String.format("displayedCapeType: %s", NicknamesMain.displayedCapeType));
+                GlobalUtils.sendMessage("");
+                GlobalUtils.sendMessage(String.format("skinLoaction: %s", mc.thePlayer.getLocationSkin() != null ? mc.thePlayer.getLocationSkin() : "NONE"));
+                GlobalUtils.sendMessage(String.format("capeLocation: %s", mc.thePlayer.getLocationCape() != null ? mc.thePlayer.getLocationCape() : "NONE"));
+                GlobalUtils.sendMessage("");
+                GlobalUtils.sendMessage(String.format("hasSkin: %s", mc.thePlayer.getLocationSkin() != null));
+            } else if (args[0].equalsIgnoreCase("__deletecache")) {
+                try {
+                    FileUtils.deleteDirectory(new File(NicknamesMain.USER_DIR + "skins"));
+                } catch (Exception ex) {}
+                GlobalUtils.sendMessage(String.format("Attempted delete. stillExists = [%s]", new File(".", "skins").exists()));
+            } else {
+                new NicknameGui(args[0]).display();
+            }
         }
     }
 

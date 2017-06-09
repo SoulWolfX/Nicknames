@@ -137,7 +137,7 @@ public class CapeSelectionGUI extends GuiScreen {
                 break;
         }
         CapeUtils.begin(mc.thePlayer, type);
-        GlobalUtils.sendMessage("Skin changed successfully!");
+        GlobalUtils.sendMessage("Cape changed successfully!");
         mc.displayGuiScreen(null);
     }
 

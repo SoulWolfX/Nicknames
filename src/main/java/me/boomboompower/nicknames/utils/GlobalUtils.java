@@ -17,6 +17,8 @@
 
 package me.boomboompower.nicknames.utils;
 
+import me.boomboompower.nicknames.NicknamesMain;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentText;
@@ -34,7 +36,7 @@ public class GlobalUtils {
     }
 
     public static boolean canSetName(String username) {
-        return (username != null) && (username.matches("^[a-zA-Z0-9&_]*$")) && (username.length() >= 3) && (username.length() <= 16) && (!username.equals(Minecraft.getMinecraft().thePlayer.getName()));
+        return (username != null) && (username.matches("^[a-zA-Z0-9&_]*$")) && (username.length() >= 3) && (username.length() <= 16) && (!username.equals(NicknamesMain.userName));
     }
 
     public static String translateAlternateColorCodes(char altColorChar, String textToTranslate) {

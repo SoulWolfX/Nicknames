@@ -176,6 +176,7 @@ public class NicknameGui extends GuiScreen {
             case 4:
                 NicknamesMain.useSkin = false;
                 SkinUtils.begin(mc.thePlayer);
+                sendChatMessage("Your skin has been reset!");
                 mc.displayGuiScreen(null);
                 break;
             case 5:
