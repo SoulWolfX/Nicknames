@@ -72,7 +72,11 @@ public class SkinUtils {
         if (reset) {
             location = loadSkin(NicknamesMain.userName);
         } else {
-            location = loadSkin(EnumChatFormatting.getTextWithoutFormattingCodes(NicknamesMain.skinName));
+            if (NicknamesMain.skinName != null) {
+                location = loadSkin(EnumChatFormatting.getTextWithoutFormattingCodes(NicknamesMain.skinName));
+            } else {
+                location = loadSkin(NicknamesMain.userName);
+            }
         }
 
         try {

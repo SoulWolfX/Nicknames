@@ -34,6 +34,8 @@ public class NicknameEvents {
                 if (NicknamesMain.useRanks && !event.message.getFormattedText().contains(" joined the ")) {
                     if (NicknamesMain.nickname.startsWith("§6")) {
                         event.message = new ChatComponentText(EnumChatFormatting.GOLD + "[YT] " + formatted(removeRank(event.message.getFormattedText())));
+                    } else if (NicknamesMain.nickname.startsWith("§b")) {
+                        event.message = new ChatComponentText(EnumChatFormatting.AQUA + "[MVP] " + formatted(removeRank(event.message.getFormattedText())));
                     } else if (NicknamesMain.nickname.startsWith("§c")) {
                         event.message = new ChatComponentText(EnumChatFormatting.RED + "[ADMIN] " + formatted(removeRank(event.message.getFormattedText())));
                     } else if (NicknamesMain.nickname.startsWith("§a")) {
