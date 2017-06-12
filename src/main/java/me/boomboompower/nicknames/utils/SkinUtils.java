@@ -45,8 +45,6 @@ public class SkinUtils {
     }
 
     public static void begin(AbstractClientPlayer player, boolean reset) {
-        if (!NicknamesMain.isEnabled()) return;
-
         mc = Minecraft.getMinecraft();
 
         Minecraft.getMinecraft().addScheduledTask(() -> replaceSkin(player, reset));

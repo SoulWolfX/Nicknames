@@ -45,6 +45,7 @@ public class NicknamesMain {
 
     public static String USER_DIR;
 
+    public static Boolean useProfile = false;
     public static Boolean useRanks = false;
     public static Boolean useSkin = false;
 
@@ -83,7 +84,7 @@ public class NicknamesMain {
     }
 
     @SubscribeEvent
-    public void onTick(TickEvent.ClientTickEvent event) {
+    public void onClientTick(TickEvent.ClientTickEvent event) {
         if (Minecraft.getMinecraft().currentScreen == null) {
             if (currentTick > 0) {
                 --currentTick;

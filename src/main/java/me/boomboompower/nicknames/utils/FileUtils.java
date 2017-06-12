@@ -60,9 +60,10 @@ public class FileUtils {
 
                List lines = f.lines().collect(Collectors.toList());
 
-               if (lines.size() >= 1) {
+               if (lines.size() >= 2) {
                    NicknamesMain.useRanks = Boolean.parseBoolean((String) lines.get(0));
                    NicknamesMain.useSkin = Boolean.parseBoolean((String) lines.get(1));
+                   NicknamesMain.useProfile = Boolean.parseBoolean((String) lines.get(2));
                } else {
                    settings = true;
                    executeWriter = true;

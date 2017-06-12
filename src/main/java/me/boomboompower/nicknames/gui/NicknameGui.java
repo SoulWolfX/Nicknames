@@ -43,11 +43,12 @@ import java.awt.*;
 
 public class NicknameGui extends GuiScreen {
 
-    int write = -70;
-    int top = -46;
-    int middle = -22;
-    int under = 2;
-    int bottom = 26;
+    int write = -76;
+    int one = -46;
+    int two = -22;
+    int three = 2;
+    int four = 26;
+    int five = 50;
 
     int butWidth = 150;
     int butHeight = 20;
@@ -69,28 +70,30 @@ public class NicknameGui extends GuiScreen {
 
         text = new GuiTextField(0, this.fontRendererObj, this.width / 2 - 75, this.height / 2 + write, butWidth, butHeight);
 
-        this.buttonList.add(new GuiButton(1, this.width / 2 - 160, this.height / 2 + top, butWidth, butHeight, "Set Name"));
-        this.buttonList.add(new GuiButton(2, this.width / 2 + 10, this.height / 2 + top, butWidth, butHeight, "Reset Name"));
+        this.buttonList.add(new GuiButton(1, this.width / 2 - 160, this.height / 2 + one, butWidth, butHeight, "Set Name"));
+        this.buttonList.add(new GuiButton(2, this.width / 2 + 10, this.height / 2 + one, butWidth, butHeight, "Reset Name"));
 
-        this.buttonList.add(new GuiButton(3, this.width / 2 - 160, this.height / 2 + middle, butWidth, butHeight, "Set Skin"));
-        this.buttonList.add(new GuiButton(4, this.width / 2 + 10, this.height / 2 + middle, butWidth, butHeight, "Reset Skin"));
+        this.buttonList.add(new GuiButton(3, this.width / 2 - 160, this.height / 2 + two, butWidth, butHeight, "Set Skin"));
+        this.buttonList.add(new GuiButton(4, this.width / 2 + 10, this.height / 2 + two, butWidth, butHeight, "Reset Skin"));
 
-        this.buttonList.add(new GuiButton(5, this.width / 2 - 160, this.height / 2 + under, butWidth, butHeight, "Set Cape"));
-        this.buttonList.add(new GuiButton(6, this.width / 2 + 10, this.height / 2 + under, butWidth, butHeight, "Reset Cape"));
+        this.buttonList.add(new GuiButton(5, this.width / 2 - 160, this.height / 2 + three, butWidth, butHeight, "Set Cape"));
+        this.buttonList.add(new GuiButton(6, this.width / 2 + 10, this.height / 2 + three, butWidth, butHeight, "Reset Cape"));
 
-        this.buttonList.add(new GuiButton(7, this.width / 2 - 160, this.height / 2 + bottom, butWidth, butHeight, "Use Ranks: " + getRanks()));
-        this.buttonList.add(new GuiButton(8, this.width / 2 + 10, this.height / 2 + bottom, butWidth, butHeight, "Change skin: " + getSkin()));
+        this.buttonList.add(new GuiButton(7, this.width / 2 - 160, this.height / 2 + four, butWidth, butHeight, "Use Ranks: " + getRanks()));
+        this.buttonList.add(new GuiButton(8, this.width / 2 + 10, this.height / 2 + four, butWidth, butHeight, "Change skin: " + getSkin()));
+
+        this.buttonList.add(new GuiButton(9, this.width / 2 - 160, this.height / 2 + five, butWidth, butHeight, "Modify Gameprofile: " + getProfile()));
+        this.buttonList.add(new GuiButton(10, this.width / 2 + 10, this.height / 2 + five, butWidth, butHeight, "Disabled"));
 
         text.setText(input);
         text.setMaxStringLength(16);
         text.setFocused(true);
 
-//        this.buttonList.get(4).enabled = false;
-//        this.buttonList.get(5).enabled = false;
+        this.buttonList.get(buttonList.size() - 1).enabled = false;
     }
     
     public void display() {
-        FMLCommonHandler.instance().bus().register(this);
+        MinecraftForge.EVENT_BUS.register(this);
     }
 
     @SubscribeEvent
@@ -192,6 +195,9 @@ public class NicknameGui extends GuiScreen {
                 NicknamesMain.useSkin = !NicknamesMain.useSkin;
                 button.displayString = "Change skin: " + getSkin();
                 break;
+            case 9:
+                NicknamesMain.useProfile = !NicknamesMain.useProfile;
+                button.displayString = "Modify Gameprofile: " + getProfile();
         }
     }
 
@@ -219,11 +225,15 @@ public class NicknameGui extends GuiScreen {
         return (NicknamesMain.useSkin ? EnumChatFormatting.GREEN + "Yes" : EnumChatFormatting.RED + "No");
     }
 
+    private String getProfile() {
+        return (NicknamesMain.useProfile ? EnumChatFormatting.GREEN + "Yes" : EnumChatFormatting.RED + "No");
+    }
+
     private void set(String name) {
         NicknamesMain.nickname = GlobalUtils.translateAlternateColorCodes('&', name);
         sendChatMessage("Your nickname is now " + goldify(name) + "!");
 
-        ProfileUtils.begin(mc.thePlayer);
+        if (NicknamesMain.useProfile) ProfileUtils.begin(mc.thePlayer);
     }
 
     private void setSkin(String skinName) {
@@ -231,7 +241,7 @@ public class NicknameGui extends GuiScreen {
         NicknamesMain.skinName = EnumChatFormatting.getTextWithoutFormattingCodes(GlobalUtils.translateAlternateColorCodes('&', skinName));
         sendChatMessage(String.format("Your skin has been updated to %s!", EnumChatFormatting.GOLD + skinName + EnumChatFormatting.GRAY));
 
-        SkinUtils.begin(mc.thePlayer, !NicknamesMain.useSkin);
+        SkinUtils.begin(mc.thePlayer, false);
     }
 
     private void reset() {
@@ -240,7 +250,7 @@ public class NicknameGui extends GuiScreen {
         sendChatMessage("Your nickname has been reset!");
 
         ProfileUtils.begin(mc.thePlayer);
-        SkinUtils.begin(mc.thePlayer);
+        SkinUtils.begin(mc.thePlayer, true);
     }
 
     private String goldify(String name) {

@@ -31,46 +31,61 @@ public class NicknameEvents {
         if (event.message == null) return;
         if (NicknamesMain.isEnabled()) {
             if (event.message.getFormattedText().contains(NicknamesMain.userName)) {
-                if (NicknamesMain.useRanks && !event.message.getFormattedText().contains(" joined the ")) {
+                String formatted = event.message.getFormattedText();
+
+                if (NicknamesMain.useRanks && !formatted.contains(" joined")) {
                     if (NicknamesMain.nickname.startsWith("§6")) {
-                        event.message = new ChatComponentText(EnumChatFormatting.GOLD + "[YT] " + formatted(removeRank(event.message.getFormattedText())));
+                        event.message = build(getFormat(formatted, "[YT] ", EnumChatFormatting.GOLD));
                     } else if (NicknamesMain.nickname.startsWith("§b")) {
-                        event.message = new ChatComponentText(EnumChatFormatting.AQUA + "[MVP] " + formatted(removeRank(event.message.getFormattedText())));
+                        event.message = build(getFormat(formatted, "[MVP] ", EnumChatFormatting.AQUA));
                     } else if (NicknamesMain.nickname.startsWith("§c")) {
-                        event.message = new ChatComponentText(EnumChatFormatting.RED + "[ADMIN] " + formatted(removeRank(event.message.getFormattedText())));
+                        event.message = build(getFormat(formatted, "[ADMIN] ", EnumChatFormatting.RED));
                     } else if (NicknamesMain.nickname.startsWith("§a")) {
-                        event.message = new ChatComponentText(EnumChatFormatting.GREEN + "[VIP] " + formatted(removeRank(event.message.getFormattedText())));
+                        event.message = build(getFormat(formatted, "[VIP] ", EnumChatFormatting.GREEN));
                     } else if (NicknamesMain.nickname.startsWith("§2")) {
-                        event.message = new ChatComponentText(EnumChatFormatting.DARK_GREEN + "[MOD] " + formatted(removeRank(event.message.getFormattedText())));
+                        event.message = build(getFormat(formatted, "[MOD] ", EnumChatFormatting.DARK_GREEN));
                     } else if (NicknamesMain.nickname.startsWith("§9")) {
-                        event.message = new ChatComponentText(EnumChatFormatting.BLUE + "[HELPER] " + formatted(removeRank(event.message.getFormattedText())));
+                        event.message = build(getFormat(formatted, "[HELPER] ", EnumChatFormatting.BLUE));
                     } else {
-                        event.message = new ChatComponentText(formatted(event.message.getFormattedText()));
+                        event.message = build(formatted(formatted));
                     }
                 } else {
-                    event.message = new ChatComponentText(formatted(event.message.getFormattedText()));
+                    event.message = build(formatted(formatted));
                 }
             }
         }
     }
 
-    public boolean isRank(String message) {
-        return message.startsWith("[MVP] ") || message.startsWith("[MVP+] ") || message.startsWith("[VIP] ") || message.startsWith("[VIP+] ");
-    }
-
     /*
 
+      - TRUE FORMATS
+    &b[MVP&c+&b] jeff&f: HI!
+    &b[MVP] jeff&f: HI!
+
+      - WHAT YOU SEE
     [SHOUT] [MVP] jeff: HI!
     [MVP] jeff: HI!
     jeff: HI!
 
      */
 
-    public String removeRank(String message) {
-        if (message.contains("]")) {
-            return message.split("]")[1].replaceFirst(" ", "");
+    public ChatComponentText build(String message) {
+        return new ChatComponentText(message);
+    }
+
+    public String getFormat(String message, String prefix, EnumChatFormatting color) {
+        message = formatted(message);
+
+        if (EnumChatFormatting.getTextWithoutFormattingCodes(message).startsWith("[")) {
+            String[] split = message.split("]");
+            try {
+                message = (split[1] + split[2]).replaceFirst(" ", "");
+            } catch (Exception ex) {
+                message = split[1].replaceFirst(" ", "");
+            }
         }
-        return message;
+
+        return color + prefix + message;
     }
 
     public String formatted(String message) {

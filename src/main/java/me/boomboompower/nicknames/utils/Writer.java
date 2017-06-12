@@ -57,6 +57,7 @@ public class Writer implements Runnable {
 
                 this.write(e, NicknamesMain.useRanks + ls);
                 this.write(e, NicknamesMain.useSkin + ls);
+                this.write(e, NicknamesMain.useProfile + ls);
 
                 e.close();
             } catch (Throwable var56) {
