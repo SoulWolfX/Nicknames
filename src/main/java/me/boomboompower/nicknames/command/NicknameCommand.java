@@ -27,17 +27,10 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumChatFormatting;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class NicknameCommand implements ICommand {
-
-    private final List<String> aliases;
-
-    public NicknameCommand() {
-        aliases = new ArrayList<String>();
-        aliases.add("nn");
-        aliases.add("nickname");
-    }
 
     @Override
     public String getCommandName() {
@@ -51,7 +44,7 @@ public class NicknameCommand implements ICommand {
 
     @Override
     public List<String> getCommandAliases() {
-        return aliases;
+        return Arrays.asList("nn", "nickname");
     }
 
     @Override

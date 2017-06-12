@@ -25,12 +25,12 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
+import java.io.File;
 
 //        - 94
 //        - 70
@@ -198,6 +198,14 @@ public class NicknameGui extends GuiScreen {
             case 9:
                 NicknamesMain.useProfile = !NicknamesMain.useProfile;
                 button.displayString = "Modify Gameprofile: " + getProfile();
+            case 10:
+                try {
+                    GlobalUtils.deleteSkinCache();
+                    GlobalUtils.sendMessage("Successfully deleted skin cache!");
+                } catch (Exception ex) {
+                    GlobalUtils.sendMessage("&cAn error occured whilst deleting the skin cache.");
+                    ex.printStackTrace();
+                }
         }
     }
 

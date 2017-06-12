@@ -23,12 +23,18 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GlobalUtils {
 
     public static final String PREFIX = EnumChatFormatting.AQUA + "N" + EnumChatFormatting.BLUE + "N" + EnumChatFormatting.DARK_GRAY + " > " + EnumChatFormatting.GRAY;
+
+    public static void deleteSkinCache() throws IOException {
+        org.apache.commons.io.FileUtils.deleteDirectory(new File(NicknamesMain.USER_DIR + "skins"));
+    }
 
     public static void sendMessage(String message) {
         Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new ChatComponentText(PREFIX + translateAlternateColorCodes('&', message)));

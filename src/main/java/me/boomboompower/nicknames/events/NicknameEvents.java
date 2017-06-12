@@ -76,7 +76,7 @@ public class NicknameEvents {
     public String getFormat(String message, String prefix, EnumChatFormatting color) {
         message = formatted(message);
 
-        if (EnumChatFormatting.getTextWithoutFormattingCodes(message).startsWith("[")) {
+        if (EnumChatFormatting.getTextWithoutFormattingCodes(message).startsWith("[") && message.contains("]")) {
             String[] split = message.split("]");
             try {
                 message = (split[1] + split[2]).replaceFirst(" ", "");

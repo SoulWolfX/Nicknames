@@ -32,7 +32,7 @@ public class ProfileUtils {
     private static final MethodHandle GET_GAMEPROFILE = ReflectUtils.findMethod(EntityPlayer.class, new String[] {"getGameProfile", "func_146103_bH"});
 
     public static void begin(AbstractClientPlayer player) {
-        if (!NicknamesMain.isEnabled()) return;
+        if (!NicknamesMain.useProfile) return;
 
         Minecraft.getMinecraft().addScheduledTask(() -> changeName(player));
     }
