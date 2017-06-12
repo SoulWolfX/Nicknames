@@ -204,6 +204,7 @@ public class NicknameGui extends GuiScreen {
                     GlobalUtils.sendMessage("&cAn error occured whilst deleting the skin cache.");
                     ex.printStackTrace();
                 }
+                mc.displayGuiScreen(null);
         }
     }
 
