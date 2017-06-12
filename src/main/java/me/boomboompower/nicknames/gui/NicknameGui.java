@@ -80,16 +80,14 @@ public class NicknameGui extends GuiScreen {
         this.buttonList.add(new GuiButton(6, this.width / 2 + 10, this.height / 2 + three, butWidth, butHeight, "Reset Cape"));
 
         this.buttonList.add(new GuiButton(7, this.width / 2 - 160, this.height / 2 + four, butWidth, butHeight, "Use Ranks: " + getRanks()));
-        this.buttonList.add(new GuiButton(8, this.width / 2 + 10, this.height / 2 + four, butWidth, butHeight, "Change skin: " + getSkin()));
+        this.buttonList.add(new GuiButton(8, this.width / 2 + 10, this.height / 2 + four, butWidth, butHeight, "Change Skin: " + getSkin()));
 
-        this.buttonList.add(new GuiButton(9, this.width / 2 - 160, this.height / 2 + five, butWidth, butHeight, "Modify Gameprofile: " + getProfile()));
-        this.buttonList.add(new GuiButton(10, this.width / 2 + 10, this.height / 2 + five, butWidth, butHeight, "Disabled"));
+        this.buttonList.add(new GuiButton(9, this.width / 2 - 160, this.height / 2 + five, butWidth, butHeight, "Modify GameProfile: " + getProfile()));
+        this.buttonList.add(new GuiButton(10, this.width / 2 + 10, this.height / 2 + five, butWidth, butHeight, "Delete Skin Cache"));
 
         text.setText(input);
         text.setMaxStringLength(16);
         text.setFocused(true);
-
-        this.buttonList.get(buttonList.size() - 1).enabled = false;
     }
     
     public void display() {
