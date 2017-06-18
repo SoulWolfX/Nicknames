@@ -88,7 +88,7 @@ public class SkinUtils {
         final ResourceLocation resourceLocation = new ResourceLocation("skins/" + username);
         ITextureObject textureObject = mc.renderEngine.getTexture(resourceLocation);
 
-        File skinsDirectory = new File(new File(NicknamesMain.USER_DIR + "skins"), username.length() > 2 ? username.substring(0, 2) : "xx");
+        File skinsDirectory = new File(new File(NicknamesMain.USER_DIR + "skins"), username.length() > 2 ? username.substring(0, 4) : "xxxx");
         File downloadedSkinLocation = new File(skinsDirectory, username);
         final IImageBuffer imageBuffer = new ImageBufferDownload();
 

@@ -16,11 +16,12 @@
  */
 package me.boomboompower.nicknames.utils;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import me.boomboompower.nicknames.NicknamesMain;
+import me.boomboompower.nicknames.gui.CapeSelectionGUI;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -28,58 +29,68 @@ import java.util.stream.Collectors;
 
 public class FileUtils {
 
-   public FileUtils() {
-   }
+    private File configFile;
 
-   public static void getVars() throws Throwable {
-       try {
-           File e = new File(NicknamesMain.USER_DIR);
-           if (!e.exists()) {
-               e.mkdirs();
-           }
+    private JsonObject config = new JsonObject();
 
-           boolean executeWriter = false;
-           boolean options = false;
-           boolean settings = false;
+    public FileUtils(File configFile) {
+        this.configFile = configFile;
+    }
 
-           if (exists(NicknamesMain.USER_DIR + "options.nn")) {
-               BufferedReader f = new BufferedReader(new FileReader(NicknamesMain.USER_DIR + "options.nn"));
+    public boolean configExists() {
+        return exists(configFile.getPath());
+    }
 
-               List lines = f.lines().collect(Collectors.toList());
+    public void loadConfig() {
+        if (configExists()) {
+            System.out.println("Config file exists! Reading...");
+            try {
+                FileReader reader = new FileReader(configFile);
+                BufferedReader bufferedReader = new BufferedReader(reader);
+                StringBuilder builder = new StringBuilder();
 
-               if (lines.size() >= 0) {
-                   NicknamesMain.nickname = (String) lines.get(0);
-               } else {
-                   options = true;
-                   executeWriter = true;
-               }
-           }
+                String currentLine;
+                while ((currentLine = bufferedReader.readLine()) != null) {
+                    builder.append(currentLine);
+                }
+                String complete = builder.toString();
 
-           if (exists(NicknamesMain.USER_DIR + "settings.nn")) {
-               BufferedReader f = new BufferedReader(new FileReader(NicknamesMain.USER_DIR + "settings.nn"));
+                config = new JsonParser().parse(complete).getAsJsonObject();
+            } catch (Exception ex) {
+                System.out.println("Could not write config! Saving...");
+                saveConfig();
+            }
+            NicknamesMain.nickname = config.has("nickname") ? config.get("nickname").getAsString() : "nickname";
+            NicknamesMain.displayedCapeType = config.has("capetype") ? CapeSelectionGUI.CapeType.valueOf(config.get("capetype").getAsString()) : CapeSelectionGUI.CapeType.NONE;
+            NicknamesMain.skinName = config.has("skinname") ? !config.get("skinname").getAsString().isEmpty() ? config.get("skinname").getAsString() : null : null;
+            NicknamesMain.useRanks = config.has("useranks") && config.get("useranks").getAsBoolean();
+        } else {
+            System.out.println("Config does not exist! Saving...");
+            saveConfig();
+        }
+    }
 
-               List lines = f.lines().collect(Collectors.toList());
+    public void saveConfig() {
+        config = new JsonObject();
+        try {
+            configFile.createNewFile();
+            FileWriter writer = new FileWriter(configFile);
+            BufferedWriter bufferedWriter = new BufferedWriter(writer);
+            config.addProperty("nickname", NicknamesMain.nickname);
+            config.addProperty("capetype", NicknamesMain.displayedCapeType.toString());
+            config.addProperty("skinname", NicknamesMain.skinName != null ? NicknamesMain.userName : NicknamesMain.skinName);
+            config.addProperty("useranks", NicknamesMain.useRanks);
 
-               if (lines.size() >= 2) {
-                   NicknamesMain.useRanks = Boolean.parseBoolean((String) lines.get(0));
-                   NicknamesMain.useSkin = Boolean.parseBoolean((String) lines.get(1));
-                   NicknamesMain.useProfile = Boolean.parseBoolean((String) lines.get(2));
-               } else {
-                   settings = true;
-                   executeWriter = true;
-               }
-           }
+            bufferedWriter.write(config.toString());
+            bufferedWriter.close();
+            writer.close();
+        } catch (Exception ex) {
+            System.out.println("Could not save config!");
+            ex.printStackTrace();
+        }
+    }
 
-           if (executeWriter) {
-               Writer.execute(options, settings);
-           }
-       } catch (Exception var32) {
-           Writer.execute(true, true);
-           var32.printStackTrace();
-       }
-   }
-
-    private static boolean exists(String path) {
+    private boolean exists(String path) {
         return Files.exists(Paths.get(path));
     }
 }

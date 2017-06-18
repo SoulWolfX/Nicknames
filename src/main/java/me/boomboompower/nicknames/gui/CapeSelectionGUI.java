@@ -49,33 +49,35 @@ public class CapeSelectionGUI extends GuiScreen {
 
     @Override
     public void initGui() {
-        this.buttonList.add(makeButton(0, "Minecon 2016", this.width / 2 - 160, this.height / 2 - 70));
-        this.buttonList.add(makeButton(1, "Minecon 2015", this.width / 2 + 10, this.height / 2 - 70));
+        this.buttonList.add(makeButton(0, "Minecon 2016", this.width / 2 - 160, this.height / 2 - 94));
+        this.buttonList.add(makeButton(1, "Minecon 2015", this.width / 2 + 10, this.height / 2 - 94));
 
-        this.buttonList.add(makeButton(2, "Minecon 2013", this.width / 2 - 160, this.height / 2 - 46));
-        this.buttonList.add(makeButton(3, "Minecon 2012", this.width / 2 + 10, this.height / 2 - 46));
+        this.buttonList.add(makeButton(2, "Minecon 2013", this.width / 2 - 160, this.height / 2 - 70));
+        this.buttonList.add(makeButton(3, "Minecon 2012", this.width / 2 + 10, this.height / 2 - 70));
 
-        this.buttonList.add(makeButton(4, "Minecon 2011", this.width / 2 - 160, this.height / 2 - 22));
-        this.buttonList.add(makeButton(5, "Mojira Moderator", this.width / 2 + 10, this.height / 2 - 22));
+        this.buttonList.add(makeButton(4, "Minecon 2011", this.width / 2 - 160, this.height / 2 - 46));
+        this.buttonList.add(makeButton(5, "Mojira Moderator", this.width / 2 + 10, this.height / 2 - 46));
 
-        this.buttonList.add(makeButton(6, "Mojang", this.width / 2 - 160, this.height / 2 + 2));
-        this.buttonList.add(makeButton(7, "Mojang (Classic)", this.width / 2 + 10, this.height / 2 + 2));
+        this.buttonList.add(makeButton(6, "Mojang", this.width / 2 - 160, this.height / 2 - 22));
+        this.buttonList.add(makeButton(7, "Mojang (Classic)", this.width / 2 + 10, this.height / 2 - 22));
 
-        this.buttonList.add(makeButton(8, "Cobalt", this.width / 2 - 160, this.height / 2 + 26));
-        this.buttonList.add(makeButton(9, "Scrolls", this.width / 2 + 10, this.height / 2 + 26));
+        this.buttonList.add(makeButton(8, "Cobalt", this.width / 2 - 160, this.height / 2 + 2));
+        this.buttonList.add(makeButton(9, "Scrolls", this.width / 2 + 10, this.height / 2 + 2));
 
-        this.buttonList.add(makeButton(10, "JulianClark", this.width / 2 - 160, this.height / 2 + 50));
-        this.buttonList.add(makeButton(11, "Millionth", this.width / 2 + 10, this.height / 2 + 50));
+        this.buttonList.add(makeButton(10, "JulianClark", this.width / 2 - 160, this.height / 2 + 26));
+        this.buttonList.add(makeButton(11, "Millionth", this.width / 2 + 10, this.height / 2 + 26));
 
-        this.buttonList.add(makeButton(12, "MrMessiah", this.width / 2 - 160, this.height / 2 + 74));
-        this.buttonList.add(makeButton(13, "Prismarine", this.width / 2 + 10, this.height / 2 + 74));
+        this.buttonList.add(makeButton(12, "MrMessiah", this.width / 2 - 160, this.height / 2 + 50));
+        this.buttonList.add(makeButton(13, "Prismarine", this.width / 2 + 10, this.height / 2 + 50));
+
+        this.buttonList.add(makeButton(14, "Advanced", this.width / 2 - 75, this.height / 2 + 74));
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawDefaultBackground();
 
-        drawCenteredString(this.fontRendererObj, "Cape Selection GUI", this.width / 2, this.height / 2 - 94, Color.WHITE.getRGB());
+        drawCenteredString(this.fontRendererObj, "Cape Selection GUI", this.width / 2, this.height / 2 - 106, Color.WHITE.getRGB());
 
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
@@ -89,6 +91,7 @@ public class CapeSelectionGUI extends GuiScreen {
 
     @Override
     protected void actionPerformed(GuiButton button) throws IOException {
+        boolean notMenu = true;
         CapeType type;
         switch (button.id) {
             case 0:
@@ -133,13 +136,18 @@ public class CapeSelectionGUI extends GuiScreen {
             case 13:
                 type = CapeType.PRISMARINE;
                 break;
+            case 14:
+                notMenu = false;
+                new AdvancedCapeGui(this).display();
             default:
                 type = CapeType.NONE;
                 break;
         }
-        CapeUtils.begin(mc.thePlayer, type);
-        GlobalUtils.sendMessage("Cape changed successfully!");
-        mc.displayGuiScreen(null);
+        if (notMenu) {
+            CapeUtils.begin(mc.thePlayer, type);
+            GlobalUtils.sendMessage("Cape changed successfully!");
+            mc.displayGuiScreen(null);
+        }
     }
 
     public enum CapeType {

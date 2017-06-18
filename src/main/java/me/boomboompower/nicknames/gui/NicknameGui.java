@@ -27,10 +27,10 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+
 import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
-import java.io.File;
 
 //        - 94
 //        - 70
@@ -211,7 +211,7 @@ public class NicknameGui extends GuiScreen {
     @Override
     public void onGuiClosed() {
         Keyboard.enableRepeatEvents(false);
-        Writer.execute(true, true);
+        NicknamesMain.fileUtils.saveConfig();
     }
 
     @Override

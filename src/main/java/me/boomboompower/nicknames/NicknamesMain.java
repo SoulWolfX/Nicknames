@@ -45,6 +45,8 @@ public class NicknamesMain {
 
     public static String USER_DIR;
 
+    public static FileUtils fileUtils;
+
     public static Boolean useProfile = false;
     public static Boolean useRanks = false;
     public static Boolean useSkin = false;
@@ -68,19 +70,13 @@ public class NicknamesMain {
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
-        registerEvents(this, new NicknameEvents());
-
-        registerCommands(new NicknameCommand());
-
-        USER_DIR = "mods" + File.separator + "nicknames" + File.separator + Minecraft.getMinecraft().getSession().getProfile().getId() + File.separator;
-
+        fileUtils = new FileUtils(new File(USER_DIR = "mods" + File.separator + "nicknames" + File.separator + Minecraft.getMinecraft().getSession().getProfile().getId() + File.separator));
         userName = Minecraft.getMinecraft().getSession().getUsername();
 
-        try {
-            FileUtils.getVars();
-        } catch (Throwable ex) {
-            ex.printStackTrace();
-        }
+        fileUtils.loadConfig();
+
+        registerEvents(this, new NicknameEvents());
+        registerCommands(new NicknameCommand());
     }
 
     @SubscribeEvent

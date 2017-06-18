@@ -22,22 +22,32 @@ import me.boomboompower.nicknames.gui.CapeSelectionGUI;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.network.NetworkPlayerInfo;
+import net.minecraft.client.renderer.IImageBuffer;
+import net.minecraft.client.renderer.ImageBufferDownload;
+import net.minecraft.client.renderer.ThreadDownloadImageData;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.lang.invoke.MethodHandle;
 
 public class CapeUtils {
 
     private static final MethodHandle GET_PLAYER_INFO = ReflectUtils.findMethod(AbstractClientPlayer.class, new String[] {"getPlayerInfo", "func_175155_b"});
 
+    public static void begin(AbstractClientPlayer player, String s) {
+        Minecraft.getMinecraft().addScheduledTask(() -> replaceCape(player, CapeSelectionGUI.CapeType.NONE, s));
+    }
+
     public static void begin(AbstractClientPlayer player, CapeSelectionGUI.CapeType type) {
         NicknamesMain.displayedCapeType = type;
 
-        Minecraft.getMinecraft().addScheduledTask(() -> replaceCape(player, type));
+        Minecraft.getMinecraft().addScheduledTask(() -> replaceCape(player, type, null));
     }
 
-    private static void replaceCape(AbstractClientPlayer player, CapeSelectionGUI.CapeType type) {
+    private static void replaceCape(AbstractClientPlayer player, CapeSelectionGUI.CapeType type, String s) {
         NetworkPlayerInfo info = null;
 
         try {
@@ -103,6 +113,14 @@ public class CapeUtils {
                 break;
         }
 
+        if (s != null) {
+            try {
+                location = downloadCape(s);
+            } catch (Exception ex) {
+                GlobalUtils.sendMessage("Could not set custom cape...");
+            }
+        }
+
         try {
             ObfuscationReflectionHelper.setPrivateValue(NetworkPlayerInfo.class, info, location, "locationCape", "field_178862_f");
         } catch (Throwable x) {
@@ -110,7 +128,49 @@ public class CapeUtils {
         }
     }
 
-    private static ResourceLocation getCape(String id) {
-        return new ResourceLocation(String.format("nicknamesmod:capes/%s.png", id));
+    private static ResourceLocation getCape(String url) {
+        return new ResourceLocation(String.format("nicknamesmod:capes/%s.png", url));
+    }
+
+    private static ResourceLocation downloadCape(String url) {
+        if (url != null && !url.isEmpty()) {
+            final ResourceLocation rl = new ResourceLocation("capeof/" + url);
+
+            TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
+
+            IImageBuffer iib = new IImageBuffer() {
+                ImageBufferDownload ibd = new ImageBufferDownload();
+                public BufferedImage parseUserSkin(BufferedImage var1) {
+                    return CapeUtils.parseCape(var1);
+                }
+
+                @Override
+                public void skinAvailable() {
+
+                }
+            };
+            ThreadDownloadImageData textureCape = new ThreadDownloadImageData(null, url, null, iib);
+            textureManager.loadTexture(rl, textureCape);
+
+            return rl;
+        } else {
+            return null;
+        }
+    }
+
+    public static BufferedImage parseCape(BufferedImage img) {
+        int imageWidth = 64;
+        int imageHeight = 32;
+        int srcWidth = img.getWidth();
+
+        for (int srcHeight = img.getHeight(); imageWidth < srcWidth || imageHeight < srcHeight; imageHeight *= 2) {
+            imageWidth *= 2;
+        }
+
+        BufferedImage imgNew = new BufferedImage(imageWidth, imageHeight, 2);
+        Graphics g = imgNew.getGraphics();
+        g.drawImage(img, 0, 0, null);
+        g.dispose();
+        return imgNew;
     }
 }
