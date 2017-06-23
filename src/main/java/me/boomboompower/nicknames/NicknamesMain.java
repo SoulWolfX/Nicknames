@@ -85,8 +85,8 @@ public class NicknamesMain {
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         try {
-            if (Class.forName("me.boomboompower.textdisplayer.loading.Placeholder") != null && nickname != null) {
-                nn = new me.boomboompower.textdisplayer.loading.Placeholder("nn_nn", nickname);
+            if (Class.forName("me.boomboompower.textdisplayer.loading.Placeholder") != null) {
+                nn = new me.boomboompower.textdisplayer.loading.Placeholder("nn_nn", nickname != null ? nickname : userName);
             }
         } catch (Throwable ex) {
             System.out.println("Issue registering placeholder, nvm");
