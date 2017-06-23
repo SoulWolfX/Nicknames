@@ -60,7 +60,7 @@ public class FileUtils {
                 System.out.println("Could not write config! Saving...");
                 saveConfig();
             }
-            NicknamesMain.nickname = config.has("nickname") ? config.get("nickname").getAsString() : "nickname";
+            NicknamesMain.nickname = config.has("nickname") ? config.get("nickname").getAsString() : null;
             NicknamesMain.displayedCapeType = config.has("capetype") ? CapeSelectionGUI.CapeType.valueOf(config.get("capetype").getAsString()) : CapeSelectionGUI.CapeType.NONE;
             NicknamesMain.skinName = config.has("skinname") ? !config.get("skinname").getAsString().isEmpty() ? config.get("skinname").getAsString() : null : null;
             NicknamesMain.useRanks = config.has("useranks") && config.get("useranks").getAsBoolean();
@@ -76,9 +76,9 @@ public class FileUtils {
             configFile.createNewFile();
             FileWriter writer = new FileWriter(configFile);
             BufferedWriter bufferedWriter = new BufferedWriter(writer);
-            config.addProperty("nickname", NicknamesMain.nickname);
+            config.addProperty("nickname", NicknamesMain.nickname != null ? NicknamesMain.nickname : NicknamesMain.userName);
             config.addProperty("capetype", NicknamesMain.displayedCapeType.toString());
-            config.addProperty("skinname", NicknamesMain.skinName != null ? NicknamesMain.userName : NicknamesMain.skinName);
+            config.addProperty("skinname", NicknamesMain.skinName != null ? NicknamesMain.skinName : NicknamesMain.userName);
             config.addProperty("useranks", NicknamesMain.useRanks);
 
             bufferedWriter.write(config.toString());

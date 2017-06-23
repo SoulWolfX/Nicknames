@@ -29,7 +29,7 @@ public class NicknameEvents {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onChatRecieve(ClientChatReceivedEvent event) {
         if (event.message == null) return;
-        if (NicknamesMain.isEnabled()) {
+        if (NicknamesMain.nickname != null && NicknamesMain.isEnabled()) {
             if (event.message.getFormattedText().contains(NicknamesMain.userName)) {
                 String formatted = event.message.getFormattedText();
 

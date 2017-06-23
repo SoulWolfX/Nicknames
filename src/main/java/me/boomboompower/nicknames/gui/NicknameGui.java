@@ -196,6 +196,7 @@ public class NicknameGui extends GuiScreen {
             case 9:
                 NicknamesMain.useProfile = !NicknamesMain.useProfile;
                 button.displayString = "Modify Gameprofile: " + getProfile();
+                break;
             case 10:
                 try {
                     GlobalUtils.deleteSkinCache();

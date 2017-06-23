@@ -31,6 +31,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ModMetadata;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -57,6 +58,8 @@ public class NicknamesMain {
 
     public static int currentTick = 0;
 
+    public static Object nn;
+
     public static CapeSelectionGUI.CapeType displayedCapeType = CapeSelectionGUI.CapeType.NONE;
 
     @Mod.EventHandler
@@ -70,13 +73,24 @@ public class NicknamesMain {
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
-        fileUtils = new FileUtils(new File(USER_DIR = "mods" + File.separator + "nicknames" + File.separator + Minecraft.getMinecraft().getSession().getProfile().getId() + File.separator));
+        fileUtils = new FileUtils(new File(USER_DIR = "mods" + File.separator + "nicknames" + File.separator + Minecraft.getMinecraft().getSession().getProfile().getId()));
         userName = Minecraft.getMinecraft().getSession().getUsername();
 
         fileUtils.loadConfig();
 
         registerEvents(this, new NicknameEvents());
         registerCommands(new NicknameCommand());
+    }
+
+    @Mod.EventHandler
+    public void postInit(FMLPostInitializationEvent event) {
+        try {
+            if (Class.forName("me.boomboompower.textdisplayer.loading.Placeholder") != null && nickname != null) {
+                nn = new me.boomboompower.textdisplayer.loading.Placeholder("nn_nn", nickname);
+            }
+        } catch (Throwable ex) {
+            System.out.println("Issue registering placeholder, nvm");
+        }
     }
 
     @SubscribeEvent
@@ -92,6 +106,12 @@ public class NicknamesMain {
                     SkinUtils.begin(Minecraft.getMinecraft().thePlayer, false);
                 }
                 currentTick = 100;
+            }
+            if (nn != null && nickname != null) {
+                try {
+                    ((me.boomboompower.textdisplayer.loading.Placeholder) nn).setReplacement(nickname);
+                } catch (Exception ex) {
+                }
             }
         }
     }
