@@ -163,7 +163,7 @@ public class NicknameGui extends GuiScreen {
                 mc.displayGuiScreen(null);
                 break;
             case 3:
-                new SkinGui(this).display();
+                new SkinGui("").display();
                 mc.displayGuiScreen(null);
                 break;
             case 4:
@@ -174,7 +174,7 @@ public class NicknameGui extends GuiScreen {
                 mc.displayGuiScreen(null);
                 break;
             case 5:
-                new CapeSelectionGUI(this).display();
+                new CapeSelectionGUI().display();
             case 6:
                 CapeUtils.begin(mc.thePlayer, CapeSelectionGUI.CapeType.NONE);
                 mc.displayGuiScreen(null);
@@ -191,7 +191,7 @@ public class NicknameGui extends GuiScreen {
                 NicknamesMain.useProfile = !NicknamesMain.useProfile;
                 button.displayString = "Modify Gameprofile: " + getProfile();
                 break;
-            case 10:
+//            case 10:
 //                try {
 //                    GlobalUtils.deleteSkinCache();
 //                    GlobalUtils.sendMessage("Successfully deleted skin cache!");

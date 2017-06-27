@@ -30,6 +30,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
 import java.io.IOException;
@@ -45,24 +46,31 @@ import java.io.IOException;
 
 public class SkinGui extends GuiScreen {
 
+    private String previousString;
     private String previousName;
     private boolean setSkin;
 
     private TextBox text;
+    private String input;
 
-    private GuiScreen previousScreen;
+    public SkinGui() {
+        this("");
+    }
 
-    public SkinGui(GuiScreen previous) {
-        this.previousScreen = previous;
-
+    public SkinGui(String input) {
         this.previousName = NicknamesMain.skinName;
+        this.previousString = "";
+        this.input = input;
     }
 
     @Override
     public void initGui() {
-        this.text = new TextBox(0, this.width / 2 - 100, this.height / 2 - 56, 200, 20);
+        Keyboard.enableRepeatEvents(true);
 
+        this.text = new TextBox(0, this.width / 2 - 100, this.height / 2 - 56, 200, 20);
         this.buttonList.add(new GuiButton(1, this.width / 2 - 75, this.height / 2 - 22, 150, 20, "Set skin"));
+
+        text.setText(input);
     }
 
     @Override
@@ -102,12 +110,13 @@ public class SkinGui extends GuiScreen {
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
-        if (keyCode == 1) {
-            mc.displayGuiScreen(previousScreen);
+        if (keyCode == 1) { // Close the screen on Esc key
+            mc.displayGuiScreen(null);
         } else {
             text.textboxKeyTyped(typedChar, keyCode);
-            if (!text.getText().isEmpty() && text.getText().length() >= 3) {
+            if (!text.getText().isEmpty() && text.getText().length() >= 3 && !text.getText().equals(previousString)) { // If the text isn't empty, its more than 2 letters and its not the same as the previous name, update
                 SkinUtils.begin(mc.thePlayer, text.getText(), false);
+                previousString = text.getText();
             }
         }
     }
@@ -122,11 +131,12 @@ public class SkinGui extends GuiScreen {
 
     @Override
     public void onGuiClosed() {
-        if (setSkin) {
+        Keyboard.enableRepeatEvents(false);
+        if (setSkin) { // Only save the config if the skin has changed
             NicknamesMain.fileUtils.saveConfig();
             SkinUtils.begin(mc.thePlayer, text.getText(), false);
         } else {
-            SkinUtils.begin(mc.thePlayer, previousName, false);
+            SkinUtils.begin(mc.thePlayer, previousName, false); // Revert to previous skin
         }
     }
 
@@ -146,6 +156,8 @@ public class SkinGui extends GuiScreen {
     }
 
     private void setSkin(String skinName) {
+        if (NicknamesMain.skinName.equals(skinName)) return; // Don't update skin if it matches the previous one
+
         setSkin = true;
         NicknamesMain.useSkin = true;
         NicknamesMain.skinName = EnumChatFormatting.getTextWithoutFormattingCodes(GlobalUtils.translateAlternateColorCodes('&', skinName));

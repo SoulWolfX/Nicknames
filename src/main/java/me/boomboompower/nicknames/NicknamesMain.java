@@ -16,7 +16,9 @@
  */
 package me.boomboompower.nicknames;
 
+import me.boomboompower.nicknames.command.CapeCommand;
 import me.boomboompower.nicknames.command.NicknameCommand;
+import me.boomboompower.nicknames.command.SkinCommand;
 import me.boomboompower.nicknames.events.NicknameEvents;
 import me.boomboompower.nicknames.gui.CapeSelectionGUI;
 import me.boomboompower.nicknames.utils.CapeUtils;
@@ -78,7 +80,7 @@ public class NicknamesMain {
         userName = Minecraft.getMinecraft().getSession().getUsername();
 
         registerEvents(this, new NicknameEvents());
-        registerCommands(new NicknameCommand());
+        registerCommands(new NicknameCommand(), new SkinCommand(), new CapeCommand());
 
         Minecraft.getMinecraft().addScheduledTask(() -> fileUtils.loadConfig());
     }

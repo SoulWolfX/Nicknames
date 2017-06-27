@@ -41,12 +41,6 @@ import java.io.IOException;
 
 public class CapeSelectionGUI extends GuiScreen {
 
-    private GuiScreen previous;
-
-    public CapeSelectionGUI(GuiScreen previousScreen) {
-        this.previous = previousScreen;
-    }
-
     @Override
     public void initGui() {
         this.buttonList.add(makeButton(0, "Minecon 2016", this.width / 2 - 160, this.height / 2 - 94));
@@ -85,7 +79,7 @@ public class CapeSelectionGUI extends GuiScreen {
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
         if (keyCode == 1) {
-            mc.displayGuiScreen(previous);
+            mc.displayGuiScreen(null);
         }
     }
 
