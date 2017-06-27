@@ -87,7 +87,7 @@ public class NicknamesMain {
     public void postInit(FMLPostInitializationEvent event) {
         try {
             if (Class.forName("me.boomboompower.textdisplayer.loading.Placeholder") != null) {
-                //nn = new me.boomboompower.textdisplayer.loading.Placeholder("nn_nn", nickname != null ? nickname : userName);
+                nn = new me.boomboompower.textdisplayer.loading.Placeholder("nn_nn", nickname != null ? nickname : userName);
             }
         } catch (Throwable ex) {
             System.out.println("Issue registering placeholder, nvm");
@@ -110,7 +110,7 @@ public class NicknamesMain {
             }
             if (nn != null && nickname != null) {
                 try {
-                    //((me.boomboompower.textdisplayer.loading.Placeholder) nn).setReplacement(nickname);
+                    ((me.boomboompower.textdisplayer.loading.Placeholder) nn).setReplacement(nickname);
                 } catch (Exception ex) {
                 }
             }
