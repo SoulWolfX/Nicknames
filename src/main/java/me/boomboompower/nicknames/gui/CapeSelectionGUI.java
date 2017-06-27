@@ -16,6 +16,7 @@
  */
 package me.boomboompower.nicknames.gui;
 
+import me.boomboompower.nicknames.NicknamesMain;
 import me.boomboompower.nicknames.utils.CapeUtils;
 import me.boomboompower.nicknames.utils.GlobalUtils;
 
@@ -170,6 +171,11 @@ public class CapeSelectionGUI extends GuiScreen {
 
     public void display() {
         MinecraftForge.EVENT_BUS.register(this);
+    }
+
+    @Override
+    public void onGuiClosed() {
+        NicknamesMain.fileUtils.saveConfig();
     }
 
     @SubscribeEvent

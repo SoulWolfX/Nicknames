@@ -17,12 +17,12 @@
 package me.boomboompower.nicknames.gui;
 
 import me.boomboompower.nicknames.NicknamesMain;
+import me.boomboompower.nicknames.gui.utils.TextBox;
 import me.boomboompower.nicknames.utils.*;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -50,10 +50,15 @@ public class NicknameGui extends GuiScreen {
     int four = 26;
     int five = 50;
 
+    int texWidth = 200;
+    int texHeight = 20;
+
     int butWidth = 150;
     int butHeight = 20;
 
-    private GuiTextField text;
+    private GuiButton cache;
+
+    private TextBox text;
     private String input = "";
 
     public NicknameGui() {
@@ -68,7 +73,7 @@ public class NicknameGui extends GuiScreen {
     public void initGui() {
         Keyboard.enableRepeatEvents(true);
 
-        text = new GuiTextField(0, this.fontRendererObj, this.width / 2 - 75, this.height / 2 + write, butWidth, butHeight);
+        text = new TextBox(0, this.width / 2 - 100, this.height / 2 + write, texWidth, texHeight);
 
         this.buttonList.add(new GuiButton(1, this.width / 2 - 160, this.height / 2 + one, butWidth, butHeight, "Set Name"));
         this.buttonList.add(new GuiButton(2, this.width / 2 + 10, this.height / 2 + one, butWidth, butHeight, "Reset Name"));
@@ -83,11 +88,11 @@ public class NicknameGui extends GuiScreen {
         this.buttonList.add(new GuiButton(8, this.width / 2 + 10, this.height / 2 + four, butWidth, butHeight, "Change Skin: " + getSkin()));
 
         this.buttonList.add(new GuiButton(9, this.width / 2 - 160, this.height / 2 + five, butWidth, butHeight, "Modify GameProfile: " + getProfile()));
-        this.buttonList.add(new GuiButton(10, this.width / 2 + 10, this.height / 2 + five, butWidth, butHeight, "Delete Skin Cache"));
+        this.buttonList.add(this.cache = new GuiButton(10, this.width / 2 + 10, this.height / 2 + five, butWidth, butHeight, "Delete Skin Cache"));
 
         text.setText(input);
-        text.setMaxStringLength(16);
-        text.setFocused(true);
+
+        cache.enabled = false;
     }
     
     public void display() {
@@ -103,8 +108,10 @@ public class NicknameGui extends GuiScreen {
     @Override
     public void drawScreen(int x, int y, float ticks) {
         drawDefaultBackground();
+
+        drawTitle("Nicknames v" + NicknamesMain.VERSION);
+
         text.drawTextBox();
-        drawCenteredString(this.fontRendererObj, "Nicknames", this.width / 2, this.height / 2 - 94, Color.WHITE.getRGB());
         super.drawScreen(x, y, ticks);
     }
 
@@ -156,25 +163,12 @@ public class NicknameGui extends GuiScreen {
                 mc.displayGuiScreen(null);
                 break;
             case 3:
-                if (!text.getText().isEmpty() && text.getText().length() >= 3) {
-                    boolean doable = true;
-                    for (char c : text.getText().toCharArray()) {
-                        if (!Character.isLetterOrDigit(c) && c != '_') {
-                            doable = false;
-                        }
-                    }
-                    if (doable) {
-                        setSkin(text.getText());
-                    } else {
-                        sendChatMessage("Name contains invalid characters!");
-                    }
-                } else {
-                    sendChatMessage("Not enough characters provided!");
-                }
+                new SkinGui(this).display();
                 mc.displayGuiScreen(null);
                 break;
             case 4:
                 NicknamesMain.useSkin = false;
+                NicknamesMain.skinName = null;
                 SkinUtils.begin(mc.thePlayer);
                 sendChatMessage("Your skin has been reset!");
                 mc.displayGuiScreen(null);
@@ -198,14 +192,14 @@ public class NicknameGui extends GuiScreen {
                 button.displayString = "Modify Gameprofile: " + getProfile();
                 break;
             case 10:
-                try {
-                    GlobalUtils.deleteSkinCache();
-                    GlobalUtils.sendMessage("Successfully deleted skin cache!");
-                } catch (Exception ex) {
-                    GlobalUtils.sendMessage("&cAn error occured whilst deleting the skin cache.");
-                    ex.printStackTrace();
-                }
-                mc.displayGuiScreen(null);
+//                try {
+//                    GlobalUtils.deleteSkinCache();
+//                    GlobalUtils.sendMessage("Successfully deleted skin cache!");
+//                } catch (Exception ex) {
+//                    GlobalUtils.sendMessage("&cAn error occured whilst deleting the skin cache.");
+//                    ex.printStackTrace();
+//                }
+//                mc.displayGuiScreen(null);
         }
     }
 
@@ -253,15 +247,18 @@ public class NicknameGui extends GuiScreen {
     }
 
     private void reset() {
-        NicknamesMain.useSkin = false;
         NicknamesMain.nickname = NicknamesMain.userName;
         sendChatMessage("Your nickname has been reset!");
 
         ProfileUtils.begin(mc.thePlayer);
-        SkinUtils.begin(mc.thePlayer, true);
     }
 
     private String goldify(String name) {
         return EnumChatFormatting.GOLD + GlobalUtils.translateAlternateColorCodes('&', name) + EnumChatFormatting.GRAY;
+    }
+
+    private void drawTitle(String text) {
+        drawCenteredString(mc.fontRendererObj, text, this.width / 2, this.height / 2 - 94, Color.WHITE.getRGB());
+        drawHorizontalLine(this.width / 2 - mc.fontRendererObj.getStringWidth(text) / 2 - 5, this.width / 2 + mc.fontRendererObj.getStringWidth(text) / 2 + 5, this.height / 2 - 83, Color.WHITE.getRGB());
     }
 }

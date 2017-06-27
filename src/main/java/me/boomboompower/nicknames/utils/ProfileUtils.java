@@ -38,6 +38,8 @@ public class ProfileUtils {
     }
 
     private static void changeName(AbstractClientPlayer player) {
+        if (NicknamesMain.isEnabled()) return;
+
         GameProfile profile = null;
 
         try {

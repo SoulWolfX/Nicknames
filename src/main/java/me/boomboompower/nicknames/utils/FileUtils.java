@@ -18,14 +18,13 @@ package me.boomboompower.nicknames.utils;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+
 import me.boomboompower.nicknames.NicknamesMain;
 import me.boomboompower.nicknames.gui.CapeSelectionGUI;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class FileUtils {
 
@@ -60,10 +59,10 @@ public class FileUtils {
                 System.out.println("Could not write config! Saving...");
                 saveConfig();
             }
-            NicknamesMain.nickname = config.has("nickname") ? config.get("nickname").getAsString() : null;
-            NicknamesMain.displayedCapeType = config.has("capetype") ? CapeSelectionGUI.CapeType.valueOf(config.get("capetype").getAsString()) : CapeSelectionGUI.CapeType.NONE;
-            NicknamesMain.skinName = config.has("skinname") ? !config.get("skinname").getAsString().isEmpty() ? config.get("skinname").getAsString() : null : null;
-            NicknamesMain.useRanks = config.has("useranks") && config.get("useranks").getAsBoolean();
+            System.out.println(NicknamesMain.nickname = config.has("nickname") ? config.get("nickname").getAsString() : null);
+            System.out.println(NicknamesMain.displayedCapeType = config.has("capetype") ? CapeSelectionGUI.CapeType.valueOf(config.get("capetype").getAsString()) : CapeSelectionGUI.CapeType.NONE);
+            System.out.println(NicknamesMain.skinName = config.has("skinname") ? !config.get("skinname").getAsString().isEmpty() ? config.get("skinname").getAsString() : null : null);
+            System.out.println(NicknamesMain.useRanks = config.has("useranks") && config.get("useranks").getAsBoolean());
         } else {
             System.out.println("Config does not exist! Saving...");
             saveConfig();
@@ -77,7 +76,7 @@ public class FileUtils {
             FileWriter writer = new FileWriter(configFile);
             BufferedWriter bufferedWriter = new BufferedWriter(writer);
             config.addProperty("nickname", NicknamesMain.nickname != null ? NicknamesMain.nickname : NicknamesMain.userName);
-            config.addProperty("capetype", NicknamesMain.displayedCapeType.toString());
+            config.addProperty("capetype", NicknamesMain.displayedCapeType.name());
             config.addProperty("skinname", NicknamesMain.skinName != null ? NicknamesMain.skinName : NicknamesMain.userName);
             config.addProperty("useranks", NicknamesMain.useRanks);
 

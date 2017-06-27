@@ -41,16 +41,20 @@ public class SkinUtils {
     private static final MethodHandle GET_PLAYER_INFO = ReflectUtils.findMethod(AbstractClientPlayer.class, new String[] {"getPlayerInfo", "func_175155_b"});
 
     public static void begin(AbstractClientPlayer player) {
-        begin(player, true);
+        begin(player, null, true);
     }
 
     public static void begin(AbstractClientPlayer player, boolean reset) {
-        mc = Minecraft.getMinecraft();
-
-        Minecraft.getMinecraft().addScheduledTask(() -> replaceSkin(player, reset));
+        begin(player, null, reset);
     }
 
-    private static void replaceSkin(AbstractClientPlayer player, boolean reset) {
+    public static void begin(AbstractClientPlayer player, String skinName, boolean reset) {
+        mc = Minecraft.getMinecraft();
+
+        Minecraft.getMinecraft().addScheduledTask(() -> replaceSkin(player, skinName, reset));
+    }
+
+    private static void replaceSkin(AbstractClientPlayer player, String skinName, boolean reset) {
         NetworkPlayerInfo info = null;
 
         try {
@@ -70,8 +74,8 @@ public class SkinUtils {
         if (reset) {
             location = loadSkin(NicknamesMain.userName);
         } else {
-            if (NicknamesMain.skinName != null) {
-                location = loadSkin(EnumChatFormatting.getTextWithoutFormattingCodes(NicknamesMain.skinName));
+            if (skinName != null) {
+                location = loadSkin(EnumChatFormatting.getTextWithoutFormattingCodes(skinName));
             } else {
                 location = loadSkin(NicknamesMain.userName);
             }
@@ -86,13 +90,9 @@ public class SkinUtils {
 
     public static ResourceLocation loadSkin(String username) {
         final ResourceLocation resourceLocation = new ResourceLocation("skins/" + username);
-        ITextureObject textureObject = mc.renderEngine.getTexture(resourceLocation);
-
-        File skinsDirectory = new File(new File(NicknamesMain.USER_DIR + "skins"), username.length() > 2 ? username.substring(0, 4) : "xxxx");
-        File downloadedSkinLocation = new File(skinsDirectory, username);
         final IImageBuffer imageBuffer = new ImageBufferDownload();
 
-        ThreadDownloadImageData imageData = new ThreadDownloadImageData(downloadedSkinLocation, String.format("https://minotar.net/skin/%s", username), DefaultPlayerSkin.getDefaultSkinLegacy(), new IImageBuffer() {
+        ThreadDownloadImageData imageData = new ThreadDownloadImageData(null, String.format("https://minotar.net/skin/%s", username), DefaultPlayerSkin.getDefaultSkinLegacy(), new IImageBuffer() {
 
             public BufferedImage parseUserSkin(BufferedImage image) {
                 if (imageBuffer != null) {

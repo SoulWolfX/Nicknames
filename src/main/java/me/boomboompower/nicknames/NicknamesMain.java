@@ -42,7 +42,7 @@ import java.io.File;
 public class NicknamesMain {
 
     public static final String MODID = "nicknamesmod";
-    public static final String VERSION = "1.3.1";
+    public static final String VERSION = "1.3.2";
 
     public static String USER_DIR;
 
@@ -53,8 +53,8 @@ public class NicknamesMain {
     public static Boolean useSkin = false;
 
     public static String skinName;
+    public static String nickname;
     public static String userName = "username";
-    public static String nickname = "nickname";
 
     public static int currentTick = 0;
 
@@ -69,24 +69,25 @@ public class NicknamesMain {
         data.name = EnumChatFormatting.GOLD + "Hypixel " + EnumChatFormatting.GRAY + "-" + EnumChatFormatting.DARK_RED + " Nicknames";
         data.authorList.add("boomboompower");
         data.description = "Allows you to nickname yourself! (Clientside) |" + EnumChatFormatting.RESET + " Made with " + EnumChatFormatting.LIGHT_PURPLE + "<3" + EnumChatFormatting.RESET + " by boomboompower";
+
+        fileUtils = new FileUtils(event.getSuggestedConfigurationFile());
     }
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
-        fileUtils = new FileUtils(new File(USER_DIR = "mods" + File.separator + "nicknames" + File.separator + Minecraft.getMinecraft().getSession().getProfile().getId()));
         userName = Minecraft.getMinecraft().getSession().getUsername();
-
-        fileUtils.loadConfig();
 
         registerEvents(this, new NicknameEvents());
         registerCommands(new NicknameCommand());
+
+        Minecraft.getMinecraft().addScheduledTask(() -> fileUtils.loadConfig());
     }
 
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         try {
             if (Class.forName("me.boomboompower.textdisplayer.loading.Placeholder") != null) {
-                nn = new me.boomboompower.textdisplayer.loading.Placeholder("nn_nn", nickname != null ? nickname : userName);
+                //nn = new me.boomboompower.textdisplayer.loading.Placeholder("nn_nn", nickname != null ? nickname : userName);
             }
         } catch (Throwable ex) {
             System.out.println("Issue registering placeholder, nvm");
@@ -103,13 +104,13 @@ public class NicknamesMain {
                     CapeUtils.begin(Minecraft.getMinecraft().thePlayer, displayedCapeType);
                 }
                 if (useSkin) {
-                    SkinUtils.begin(Minecraft.getMinecraft().thePlayer, false);
+                    SkinUtils.begin(Minecraft.getMinecraft().thePlayer, skinName, false);
                 }
                 currentTick = 100;
             }
             if (nn != null && nickname != null) {
                 try {
-                    ((me.boomboompower.textdisplayer.loading.Placeholder) nn).setReplacement(nickname);
+                    //((me.boomboompower.textdisplayer.loading.Placeholder) nn).setReplacement(nickname);
                 } catch (Exception ex) {
                 }
             }
@@ -134,6 +135,6 @@ public class NicknamesMain {
     }
 
     public static boolean isEnabled() {
-        return !NicknamesMain.nickname.equals(NicknamesMain.userName);
+        return !(NicknamesMain.nickname == null || NicknamesMain.nickname.equals(NicknamesMain.userName));
     }
 }

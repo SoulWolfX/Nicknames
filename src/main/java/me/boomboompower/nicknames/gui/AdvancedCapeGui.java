@@ -61,7 +61,7 @@ public class AdvancedCapeGui extends GuiScreen {
         this.buttonList.add(this.setButton = makeButton(1, "Set cape", this.width / 2 - 75, this.height / 2 + 2));
         this.buttonList.add(makeButton(2, "Back", this.width / 2 - 75, this.height / 2 + 74));
 
-        textField.setMaxStringLength(100);
+        textField.setMaxStringLength(150);
         textField.setCanLoseFocus(false);
         textField.setFocused(true);
     }
