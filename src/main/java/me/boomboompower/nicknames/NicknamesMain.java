@@ -38,8 +38,6 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
-import java.io.File;
-
 @Mod(modid = NicknamesMain.MODID, version = NicknamesMain.VERSION, clientSideOnly = true, acceptedMinecraftVersions = "*")
 public class NicknamesMain {
 

@@ -24,14 +24,12 @@ import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.client.renderer.IImageBuffer;
 import net.minecraft.client.renderer.ImageBufferDownload;
 import net.minecraft.client.renderer.ThreadDownloadImageData;
-import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.lang.invoke.MethodHandle;
 
 public class SkinUtils {
@@ -83,6 +81,7 @@ public class SkinUtils {
 
         try {
             ObfuscationReflectionHelper.setPrivateValue(NetworkPlayerInfo.class, info, location, "locationSkin", "field_178865_e");
+            System.out.println(String.format("Player skin location is now: %s", location.getResourcePath()));
         } catch (Throwable x) {
             x.printStackTrace();
         }

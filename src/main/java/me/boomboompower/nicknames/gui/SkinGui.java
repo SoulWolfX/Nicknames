@@ -107,10 +107,11 @@ public class SkinGui extends GuiScreen {
                 mc.displayGuiScreen(null);
                 break;
             case 2:
-                SkinUtils.begin(mc.thePlayer);
-
+                previousName = NicknamesMain.userName;
                 NicknamesMain.useSkin = false;
                 NicknamesMain.skinName = null;
+
+                SkinUtils.begin(mc.thePlayer);
 
                 sendChatMessage("Your skin has been reset!");
                 mc.displayGuiScreen(null);

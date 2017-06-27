@@ -43,19 +43,6 @@ import java.awt.*;
 
 public class NicknameGui extends GuiScreen {
 
-    int write = -76;
-    int one = -46;
-    int two = -22;
-    int three = 2;
-    int four = 26;
-    int five = 50;
-
-    int texWidth = 200;
-    int texHeight = 20;
-
-    int butWidth = 150;
-    int butHeight = 20;
-
     private GuiButton cache;
 
     private TextBox text;
@@ -73,22 +60,22 @@ public class NicknameGui extends GuiScreen {
     public void initGui() {
         Keyboard.enableRepeatEvents(true);
 
-        text = new TextBox(0, this.width / 2 - 100, this.height / 2 + write, texWidth, texHeight);
+        text = new TextBox(0, this.width / 2 - 100, this.height / 2 - 76, 200, 20);
 
-        this.buttonList.add(new GuiButton(1, this.width / 2 - 160, this.height / 2 + one, butWidth, butHeight, "Set Name"));
-        this.buttonList.add(new GuiButton(2, this.width / 2 + 10, this.height / 2 + one, butWidth, butHeight, "Reset Name"));
+        this.buttonList.add(new GuiButton(1, this.width / 2 - 160, this.height / 2 - 46, 150, 20, "Set Name"));
+        this.buttonList.add(new GuiButton(2, this.width / 2 + 10, this.height / 2 - 46, 150, 20, "Reset Name"));
 
-        this.buttonList.add(new GuiButton(3, this.width / 2 - (butWidth + 10), this.height / 2 + two, butWidth * 2 + 20, butHeight, "Skin Settings"));
-        //this.buttonList.add(new GuiButton(4, this.width / 2 + 10, this.height / 2 + two, butWidth, butHeight, "Reset Skin"));
+        this.buttonList.add(new GuiButton(3, this.width / 2 - (150 + 10), this.height / 2 - 22, 150 * 2 + 20, 20, "Skin Settings"));
+        //this.buttonList.add(new GuiButton(4, this.width / 2 + 10, this.height / 2 + two, 150, 20, "Reset Skin"));
 
-        this.buttonList.add(new GuiButton(5, this.width / 2 - (butWidth + 10), this.height / 2 + three, butWidth * 2 + 20, butHeight, "Cape Settings"));
-        //this.buttonList.add(new GuiButton(6, this.width / 2 + 10, this.height / 2 + three, butWidth, butHeight, "Reset Cape"));
+        this.buttonList.add(new GuiButton(5, this.width / 2 - (150 + 10), this.height / 2 + 2, 150 * 2 + 20, 20, "Cape Settings"));
+        //this.buttonList.add(new GuiButton(6, this.width / 2 + 10, this.height / 2 + three, 150, 20, "Reset Cape"));
 
-        this.buttonList.add(new GuiButton(7, this.width / 2 - 160, this.height / 2 + four, butWidth, butHeight, "Use Ranks: " + getRanks()));
-        this.buttonList.add(new GuiButton(8, this.width / 2 + 10, this.height / 2 + four, butWidth, butHeight, "Change Skin: " + getSkin()));
+        this.buttonList.add(new GuiButton(7, this.width / 2 - 160, this.height / 2 + 26, 150, 20, "Use Ranks: " + getRanks()));
+        this.buttonList.add(new GuiButton(8, this.width / 2 + 10, this.height / 2 + 26, 150, 20, "Change Skin: " + getSkin()));
 
-        this.buttonList.add(new GuiButton(9, this.width / 2 - 160, this.height / 2 + five, butWidth, butHeight, "Modify GameProfile: " + getProfile()));
-        this.buttonList.add(this.cache = new GuiButton(10, this.width / 2 + 10, this.height / 2 + five, butWidth, butHeight, "Delete Skin Cache"));
+        this.buttonList.add(new GuiButton(9, this.width / 2 - 160, this.height / 2 + 50, 150, 20, "Modify GameProfile: " + getProfile()));
+        this.buttonList.add(this.cache = new GuiButton(10, this.width / 2 + 10, this.height / 2 + 50, 150, 20, "Delete Skin Cache"));
 
         text.setText(input);
 
