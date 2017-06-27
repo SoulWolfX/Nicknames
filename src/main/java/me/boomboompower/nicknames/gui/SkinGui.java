@@ -69,6 +69,7 @@ public class SkinGui extends GuiScreen {
 
         this.text = new TextBox(0, this.width / 2 - 100, this.height / 2 - 56, 200, 20);
         this.buttonList.add(new GuiButton(1, this.width / 2 - 75, this.height / 2 - 22, 150, 20, "Set skin"));
+        this.buttonList.add(new GuiButton(2, this.width / 2 - 75, this.height / 2 + 2, 150, 20, "Reset skin"));
 
         text.setText(input);
     }
@@ -88,7 +89,7 @@ public class SkinGui extends GuiScreen {
     protected void actionPerformed(GuiButton button) throws IOException {
         switch (button.id) {
             case 1:
-                if (!text.getText().isEmpty() && text.getText().length() >= 3) {
+                if (GlobalUtils.canSetName(text.getText())) {
                     boolean doable = true;
                     for (char c : text.getText().toCharArray()) {
                         if (!Character.isLetterOrDigit(c) && c != '_') {
@@ -105,6 +106,15 @@ public class SkinGui extends GuiScreen {
                 }
                 mc.displayGuiScreen(null);
                 break;
+            case 2:
+                SkinUtils.begin(mc.thePlayer);
+
+                NicknamesMain.useSkin = false;
+                NicknamesMain.skinName = null;
+
+                sendChatMessage("Your skin has been reset!");
+                mc.displayGuiScreen(null);
+                break;
         }
     }
 
@@ -114,7 +124,7 @@ public class SkinGui extends GuiScreen {
             mc.displayGuiScreen(null);
         } else {
             text.textboxKeyTyped(typedChar, keyCode);
-            if (!text.getText().isEmpty() && text.getText().length() >= 3 && !text.getText().equals(previousString)) { // If the text isn't empty, its more than 2 letters and its not the same as the previous name, update
+            if (!GlobalUtils.canSetName(text.getText()) && !text.getText().equals(previousString)) { // If the text isn't empty, its more than 2 letters and its not the same as the previous name, update
                 SkinUtils.begin(mc.thePlayer, text.getText(), false);
                 previousString = text.getText();
             }
@@ -158,8 +168,7 @@ public class SkinGui extends GuiScreen {
     private void setSkin(String skinName) {
         if (NicknamesMain.skinName.equals(skinName)) return; // Don't update skin if it matches the previous one
 
-        setSkin = true;
-        NicknamesMain.useSkin = true;
+        setSkin = true; // Config will now be saved
         NicknamesMain.skinName = EnumChatFormatting.getTextWithoutFormattingCodes(GlobalUtils.translateAlternateColorCodes('&', skinName));
         sendChatMessage(String.format("Your skin has been updated to %s!", EnumChatFormatting.GOLD + skinName + EnumChatFormatting.GRAY));
     }

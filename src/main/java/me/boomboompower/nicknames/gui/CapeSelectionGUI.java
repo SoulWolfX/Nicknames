@@ -65,13 +65,14 @@ public class CapeSelectionGUI extends GuiScreen {
         this.buttonList.add(makeButton(13, "Prismarine", this.width / 2 + 10, this.height / 2 + 50));
 
         this.buttonList.add(makeButton(14, "Advanced", this.width / 2 - 75, this.height / 2 + 74));
+        this.buttonList.add(makeButton(15, "Reset Cape", this.width / 2 - 75, this.height / 2 + 98));
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawDefaultBackground();
 
-        drawCenteredString(this.fontRendererObj, "Cape Selection GUI", this.width / 2, this.height / 2 - 106, Color.WHITE.getRGB());
+        drawCenteredString(this.fontRendererObj, "Cape Selection Menu", this.width / 2, 15, Color.WHITE.getRGB());
 
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
@@ -86,7 +87,7 @@ public class CapeSelectionGUI extends GuiScreen {
     @Override
     protected void actionPerformed(GuiButton button) throws IOException {
         boolean notMenu = true;
-        CapeType type;
+        CapeType type = CapeType.NONE;
         switch (button.id) {
             case 0:
                 type = CapeType.Y_2016;
@@ -133,6 +134,12 @@ public class CapeSelectionGUI extends GuiScreen {
             case 14:
                 notMenu = false;
                 new AdvancedCapeGui(this).display();
+                break;
+            case 15:
+                notMenu = false;
+                CapeUtils.begin(mc.thePlayer, CapeType.NONE);
+                sendChatMessage("Your cape has been reset!");
+                break;
             default:
                 type = CapeType.NONE;
                 break;

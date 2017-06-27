@@ -32,10 +32,6 @@ public class GlobalUtils {
 
     public static final String PREFIX = EnumChatFormatting.AQUA + "N" + EnumChatFormatting.BLUE + "N" + EnumChatFormatting.DARK_GRAY + " > " + EnumChatFormatting.GRAY;
 
-    public static void deleteSkinCache() throws IOException {
-        org.apache.commons.io.FileUtils.deleteDirectory(new File(NicknamesMain.USER_DIR + "skins"));
-    }
-
     public static void sendMessage(String message) {
         Minecraft.getMinecraft().thePlayer.addChatComponentMessage(new ChatComponentText(PREFIX + translateAlternateColorCodes('&', message)));
     }
