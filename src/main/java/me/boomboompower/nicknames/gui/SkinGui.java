@@ -89,7 +89,7 @@ public class SkinGui extends GuiScreen {
     protected void actionPerformed(GuiButton button) throws IOException {
         switch (button.id) {
             case 1:
-                if (GlobalUtils.canSetName(text.getText())) {
+                if (!text.getText().isEmpty() && text.getText().length() >= 2) {
                     boolean doable = true;
                     for (char c : text.getText().toCharArray()) {
                         if (!Character.isLetterOrDigit(c) && c != '_') {
@@ -125,7 +125,7 @@ public class SkinGui extends GuiScreen {
             mc.displayGuiScreen(null);
         } else {
             text.textboxKeyTyped(typedChar, keyCode);
-            if (!GlobalUtils.canSetName(text.getText()) && !text.getText().equals(previousString)) { // If the text isn't empty, its more than 2 letters and its not the same as the previous name, update
+            if (!text.getText().isEmpty() && text.getText().length() >= 2 && !text.getText().equals(previousString)) { // If the text isn't empty, its more than 2 letters and its not the same as the previous name, update
                 SkinUtils.begin(mc.thePlayer, text.getText(), false);
                 previousString = text.getText();
             }
