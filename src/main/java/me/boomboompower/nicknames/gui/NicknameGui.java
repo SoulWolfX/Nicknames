@@ -161,9 +161,9 @@ public class NicknameGui extends GuiScreen {
 //                mc.displayGuiScreen(null);
 //                break;
             case 5:
-                new CapeSelectionGUI().display();
+                new CapeGui().display();
 //            case 6:
-//                CapeUtils.begin(mc.thePlayer, CapeSelectionGUI.CapeType.NONE);
+//                CapeUtils.begin(mc.thePlayer, CapeGui.CapeType.NONE);
 //                mc.displayGuiScreen(null);
 //                break;
             case 7:

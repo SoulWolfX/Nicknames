@@ -20,7 +20,7 @@ import me.boomboompower.nicknames.command.CapeCommand;
 import me.boomboompower.nicknames.command.NicknameCommand;
 import me.boomboompower.nicknames.command.SkinCommand;
 import me.boomboompower.nicknames.events.NicknameEvents;
-import me.boomboompower.nicknames.gui.CapeSelectionGUI;
+import me.boomboompower.nicknames.gui.CapeGui;
 import me.boomboompower.nicknames.utils.CapeUtils;
 import me.boomboompower.nicknames.utils.FileUtils;
 import me.boomboompower.nicknames.utils.SkinUtils;
@@ -37,6 +37,7 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import org.apache.commons.lang3.text.WordUtils;
 
 @Mod(modid = NicknamesMain.MODID, version = NicknamesMain.VERSION, clientSideOnly = true, acceptedMinecraftVersions = "*")
 public class NicknamesMain {
@@ -58,9 +59,12 @@ public class NicknamesMain {
 
     public static int currentTick = 0;
 
+    public static Object un;
     public static Object nn;
+    public static Object sn;
+    public static Object ct;
 
-    public static CapeSelectionGUI.CapeType displayedCapeType = CapeSelectionGUI.CapeType.NONE;
+    public static CapeGui.CapeType displayedCapeType = CapeGui.CapeType.NONE;
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
@@ -87,7 +91,10 @@ public class NicknamesMain {
     public void postInit(FMLPostInitializationEvent event) {
         try {
             if (Class.forName("me.boomboompower.textdisplayer.loading.Placeholder") != null) {
+                un = new me.boomboompower.textdisplayer.loading.Placeholder("nn_un", nickname != null ? nickname : "Player");
                 nn = new me.boomboompower.textdisplayer.loading.Placeholder("nn_nn", nickname != null ? nickname : userName);
+                sn = new me.boomboompower.textdisplayer.loading.Placeholder("nn_sn", skinName != null ? skinName : "None");
+                sn = new me.boomboompower.textdisplayer.loading.Placeholder("nn_ct", displayedCapeType != null ? WordUtils.capitalizeFully(displayedCapeType.name()) : CapeGui.CapeType.NONE.name());
             }
         } catch (Throwable ex) {
             System.out.println("Issue registering placeholder, nvm");
@@ -100,7 +107,7 @@ public class NicknamesMain {
             if (currentTick > 0) {
                 --currentTick;
             } else {
-                if (displayedCapeType != CapeSelectionGUI.CapeType.NONE) {
+                if (displayedCapeType != CapeGui.CapeType.NONE) {
                     CapeUtils.begin(Minecraft.getMinecraft().thePlayer, displayedCapeType);
                 }
                 if (useSkin) {
@@ -110,7 +117,10 @@ public class NicknamesMain {
             }
             if (nn != null && nickname != null) {
                 try {
-                    ((me.boomboompower.textdisplayer.loading.Placeholder) nn).setReplacement(nickname);
+                    ((me.boomboompower.textdisplayer.loading.Placeholder) un).setReplacement(userName != null ? userName : "Player");
+                    ((me.boomboompower.textdisplayer.loading.Placeholder) nn).setReplacement(nickname != null ? nickname : userName);
+                    ((me.boomboompower.textdisplayer.loading.Placeholder) sn).setReplacement(skinName != null ? skinName : "None");
+                    ((me.boomboompower.textdisplayer.loading.Placeholder) sn).setReplacement(displayedCapeType != null ? WordUtils.capitalizeFully(displayedCapeType.name()) : CapeGui.CapeType.NONE.name());
                 } catch (Exception ex) {
                 }
             }

@@ -20,7 +20,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import me.boomboompower.nicknames.NicknamesMain;
-import me.boomboompower.nicknames.gui.CapeSelectionGUI;
+import me.boomboompower.nicknames.gui.CapeGui;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -60,7 +60,7 @@ public class FileUtils {
                 saveConfig();
             }
             System.out.println(NicknamesMain.nickname = config.has("nickname") ? config.get("nickname").getAsString() : null);
-            System.out.println(NicknamesMain.displayedCapeType = config.has("capetype") ? CapeSelectionGUI.CapeType.valueOf(config.get("capetype").getAsString()) : CapeSelectionGUI.CapeType.NONE);
+            System.out.println(NicknamesMain.displayedCapeType = config.has("capetype") ? CapeGui.CapeType.valueOf(config.get("capetype").getAsString()) : CapeGui.CapeType.NONE);
             System.out.println(NicknamesMain.skinName = config.has("skinname") ? !config.get("skinname").getAsString().isEmpty() ? config.get("skinname").getAsString() : null : null);
             System.out.println(NicknamesMain.useRanks = config.has("useranks") && config.get("useranks").getAsBoolean());
         } else {

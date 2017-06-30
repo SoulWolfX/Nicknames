@@ -39,7 +39,7 @@ import java.io.IOException;
 //        + 50
 //        + 74
 
-public class CapeSelectionGUI extends GuiScreen {
+public class CapeGui extends GuiScreen {
 
     @Override
     public void initGui() {

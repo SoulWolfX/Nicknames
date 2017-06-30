@@ -17,7 +17,7 @@
 package me.boomboompower.nicknames.utils;
 
 import me.boomboompower.nicknames.NicknamesMain;
-import me.boomboompower.nicknames.gui.CapeSelectionGUI;
+import me.boomboompower.nicknames.gui.CapeGui;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
@@ -38,16 +38,16 @@ public class CapeUtils {
     private static final MethodHandle GET_PLAYER_INFO = ReflectUtils.findMethod(AbstractClientPlayer.class, new String[] {"getPlayerInfo", "func_175155_b"});
 
     public static void begin(AbstractClientPlayer player, String s) {
-        Minecraft.getMinecraft().addScheduledTask(() -> replaceCape(player, CapeSelectionGUI.CapeType.NONE, s));
+        Minecraft.getMinecraft().addScheduledTask(() -> replaceCape(player, CapeGui.CapeType.NONE, s));
     }
 
-    public static void begin(AbstractClientPlayer player, CapeSelectionGUI.CapeType type) {
+    public static void begin(AbstractClientPlayer player, CapeGui.CapeType type) {
         NicknamesMain.displayedCapeType = type;
 
         Minecraft.getMinecraft().addScheduledTask(() -> replaceCape(player, type, null));
     }
 
-    private static void replaceCape(AbstractClientPlayer player, CapeSelectionGUI.CapeType type, String s) {
+    private static void replaceCape(AbstractClientPlayer player, CapeGui.CapeType type, String s) {
         NetworkPlayerInfo info = null;
 
         try {

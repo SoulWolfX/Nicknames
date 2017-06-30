@@ -16,7 +16,7 @@
  */
 package me.boomboompower.nicknames.command;
 
-import me.boomboompower.nicknames.gui.CapeSelectionGUI;
+import me.boomboompower.nicknames.gui.CapeGui;
 
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
@@ -46,7 +46,7 @@ public class CapeCommand implements ICommand {
 
     @Override
     public void processCommand(ICommandSender sender, String[] args) throws CommandException {
-        new CapeSelectionGUI().display();
+        new CapeGui().display();
     }
 
     @Override
