@@ -43,7 +43,7 @@ import org.apache.commons.lang3.text.WordUtils;
 public class NicknamesMain {
 
     public static final String MODID = "nicknamesmod";
-    public static final String VERSION = "1.3.3";
+    public static final String VERSION = "1.3.4";
 
     public static String USER_DIR;
 
@@ -94,7 +94,7 @@ public class NicknamesMain {
                 un = new me.boomboompower.textdisplayer.loading.Placeholder("nn_un", nickname != null ? nickname : "Player");
                 nn = new me.boomboompower.textdisplayer.loading.Placeholder("nn_nn", nickname != null ? nickname : userName);
                 sn = new me.boomboompower.textdisplayer.loading.Placeholder("nn_sn", skinName != null ? skinName : "None");
-                sn = new me.boomboompower.textdisplayer.loading.Placeholder("nn_ct", displayedCapeType != null ? WordUtils.capitalizeFully(displayedCapeType.name()) : CapeGui.CapeType.NONE.name());
+                sn = new me.boomboompower.textdisplayer.loading.Placeholder("nn_ct", WordUtils.capitalizeFully(displayedCapeType != null ? displayedCapeType.name() : CapeGui.CapeType.NONE.name()));
             }
         } catch (Throwable ex) {
             System.out.println("Issue registering placeholder, nvm");
@@ -120,7 +120,7 @@ public class NicknamesMain {
                     ((me.boomboompower.textdisplayer.loading.Placeholder) un).setReplacement(userName != null ? userName : "Player");
                     ((me.boomboompower.textdisplayer.loading.Placeholder) nn).setReplacement(nickname != null ? nickname : userName);
                     ((me.boomboompower.textdisplayer.loading.Placeholder) sn).setReplacement(skinName != null ? skinName : "None");
-                    ((me.boomboompower.textdisplayer.loading.Placeholder) sn).setReplacement(displayedCapeType != null ? WordUtils.capitalizeFully(displayedCapeType.name()) : CapeGui.CapeType.NONE.name());
+                    ((me.boomboompower.textdisplayer.loading.Placeholder) sn).setReplacement(WordUtils.capitalizeFully(displayedCapeType != null ? displayedCapeType.name() : CapeGui.CapeType.NONE.name()));
                 } catch (Exception ex) {
                 }
             }

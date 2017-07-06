@@ -61,6 +61,8 @@ public class SkinGui extends GuiScreen {
         this.previousName = NicknamesMain.skinName;
         this.previousString = "";
         this.input = input;
+
+        this.setSkin = true;
     }
 
     @Override
@@ -89,11 +91,13 @@ public class SkinGui extends GuiScreen {
     protected void actionPerformed(GuiButton button) throws IOException {
         switch (button.id) {
             case 1:
+                mc.displayGuiScreen(null);
                 if (!text.getText().isEmpty() && text.getText().length() >= 2) {
                     boolean doable = true;
                     for (char c : text.getText().toCharArray()) {
                         if (!Character.isLetterOrDigit(c) && c != '_') {
                             doable = false;
+                            break;
                         }
                     }
                     if (doable) {
@@ -104,7 +108,6 @@ public class SkinGui extends GuiScreen {
                 } else {
                     sendChatMessage("Not enough characters provided!");
                 }
-                mc.displayGuiScreen(null);
                 break;
             case 2:
                 previousName = NicknamesMain.userName;
@@ -123,6 +126,9 @@ public class SkinGui extends GuiScreen {
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
         if (keyCode == 1) { // Close the screen on Esc key
             mc.displayGuiScreen(null);
+            if (!text.getText().isEmpty() && text.getText().length() >= 2 && !text.getText().equals(previousString)) { // If the text isn't empty, its more than 2 letters and its not the same as the previous name, update
+                setSkin = true;
+            }
         } else {
             text.textboxKeyTyped(typedChar, keyCode);
             if (!text.getText().isEmpty() && text.getText().length() >= 2 && !text.getText().equals(previousString)) { // If the text isn't empty, its more than 2 letters and its not the same as the previous name, update

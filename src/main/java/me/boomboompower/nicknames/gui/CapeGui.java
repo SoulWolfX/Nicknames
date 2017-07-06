@@ -136,9 +136,8 @@ public class CapeGui extends GuiScreen {
                 new AdvancedCapeGui(this).display();
                 break;
             case 15:
-                notMenu = false;
                 CapeUtils.begin(mc.thePlayer, CapeType.NONE);
-                sendChatMessage("Your cape has been reset!");
+                GlobalUtils.sendMessage("Your cape has been reset!");
                 break;
             default:
                 type = CapeType.NONE;
@@ -149,6 +148,11 @@ public class CapeGui extends GuiScreen {
             GlobalUtils.sendMessage("Cape changed successfully!");
             mc.displayGuiScreen(null);
         }
+    }
+
+    @Override
+    public void sendChatMessage(String msg) {
+        GlobalUtils.sendMessage(msg);
     }
 
     public enum CapeType {

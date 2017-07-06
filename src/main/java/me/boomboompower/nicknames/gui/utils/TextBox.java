@@ -18,6 +18,7 @@
 package me.boomboompower.nicknames.gui.utils;
 
 import me.boomboompower.nicknames.NicknamesMain;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
