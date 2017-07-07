@@ -43,7 +43,7 @@ import org.apache.commons.lang3.text.WordUtils;
 public class NicknamesMain {
 
     public static final String MODID = "nicknamesmod";
-    public static final String VERSION = "1.3.4";
+    public static final String VERSION = "1.3.5";
 
     public static String USER_DIR;
 
@@ -53,6 +53,7 @@ public class NicknamesMain {
     public static Boolean useRanks = false;
     public static Boolean useSkin = false;
 
+    public static String capeUrl;
     public static String skinName;
     public static String nickname;
     public static String userName = "username";

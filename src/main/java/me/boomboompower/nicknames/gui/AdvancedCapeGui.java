@@ -19,6 +19,7 @@ package me.boomboompower.nicknames.gui;
 
 import me.boomboompower.nicknames.utils.CapeUtils;
 import me.boomboompower.nicknames.utils.GlobalUtils;
+import me.boomboompower.textdisplayer.utils.ChatColor;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -30,6 +31,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import org.lwjgl.input.Keyboard;
 
+import java.awt.*;
 import java.io.IOException;
 import java.net.URL;
 
@@ -69,6 +71,8 @@ public class AdvancedCapeGui extends GuiScreen {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawDefaultBackground();
+
+        drawMessage(this.width / 2, this.height / 2 - 58, 12, "Please enter a URL to the cape", "Loading will be attempted (may not always work)");
 
         setButton.enabled = textField.getText() != null && !textField.getText().isEmpty();
 
@@ -119,6 +123,11 @@ public class AdvancedCapeGui extends GuiScreen {
         Keyboard.enableRepeatEvents(false);
     }
 
+    @Override
+    public boolean doesGuiPauseGame() {
+        return false;
+    }
+
     public void display() {
         MinecraftForge.EVENT_BUS.register(this);
     }
@@ -131,5 +140,12 @@ public class AdvancedCapeGui extends GuiScreen {
 
     private GuiButton makeButton(int id, String name, int x, int y) {
         return new GuiButton(id, x, y, 150, 20, name);
+    }
+
+    private void drawMessage(int x, int y, int separation, String... messages) {
+        for (String s : messages) {
+            drawCenteredString(fontRendererObj, ChatColor.translateAlternateColorCodes(s), x, y, Color.WHITE.getRGB());
+            y += separation;
+        }
     }
 }

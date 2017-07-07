@@ -157,6 +157,7 @@ public class CapeGui extends GuiScreen {
 
     public enum CapeType {
         NONE,
+        CUSTOM,
         Y_2016,
         Y_2015,
         Y_2013,
@@ -181,6 +182,11 @@ public class CapeGui extends GuiScreen {
     @Override
     public void onGuiClosed() {
         NicknamesMain.fileUtils.saveConfig();
+    }
+
+    @Override
+    public boolean doesGuiPauseGame() {
+        return false;
     }
 
     @SubscribeEvent

@@ -79,6 +79,10 @@ public class SkinUtils {
             }
         }
 
+        if (location != null && location.getResourceDomain().equals(player.getLocationSkin().getResourceDomain())) {
+            return;
+        }
+
         try {
             ObfuscationReflectionHelper.setPrivateValue(NetworkPlayerInfo.class, info, location, "locationSkin", "field_178865_e");
             System.out.println(String.format("Player skin location is now: %s", location.getResourcePath()));

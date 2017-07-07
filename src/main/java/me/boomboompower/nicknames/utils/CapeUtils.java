@@ -38,16 +38,18 @@ public class CapeUtils {
     private static final MethodHandle GET_PLAYER_INFO = ReflectUtils.findMethod(AbstractClientPlayer.class, new String[] {"getPlayerInfo", "func_175155_b"});
 
     public static void begin(AbstractClientPlayer player, String s) {
-        Minecraft.getMinecraft().addScheduledTask(() -> replaceCape(player, CapeGui.CapeType.NONE, s));
+        NicknamesMain.capeUrl = s;
+
+        begin(player, CapeGui.CapeType.CUSTOM);
     }
 
     public static void begin(AbstractClientPlayer player, CapeGui.CapeType type) {
         NicknamesMain.displayedCapeType = type;
 
-        Minecraft.getMinecraft().addScheduledTask(() -> replaceCape(player, type, null));
+        Minecraft.getMinecraft().addScheduledTask(() -> replaceCape(player, type));
     }
 
-    private static void replaceCape(AbstractClientPlayer player, CapeGui.CapeType type, String s) {
+    private static void replaceCape(AbstractClientPlayer player, CapeGui.CapeType type) {
         NetworkPlayerInfo info = null;
 
         try {
@@ -108,17 +110,21 @@ public class CapeUtils {
             case CHRISTMAS:
                 location = getCape("christmas");
                 break;
+            case CUSTOM:
+                try {
+                    location = downloadCape(NicknamesMain.capeUrl);
+                } catch (Exception ex) {
+                    GlobalUtils.sendMessage("Could not set custom cape...");
+                    location = null;
+                }
+                break;
             default:
                 location = null;
                 break;
         }
 
-        if (s != null) {
-            try {
-                location = downloadCape(s);
-            } catch (Exception ex) {
-                GlobalUtils.sendMessage("Could not set custom cape...");
-            }
+        if (location != null && location.getResourceDomain().equals(player.getLocationSkin().getResourceDomain())) {
+            return;
         }
 
         try {

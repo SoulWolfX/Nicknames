@@ -162,6 +162,11 @@ public class SkinGui extends GuiScreen {
         GlobalUtils.sendMessage(msg);
     }
 
+    @Override
+    public boolean doesGuiPauseGame() {
+        return false;
+    }
+
     public void display() {
         MinecraftForge.EVENT_BUS.register(this);
     }
